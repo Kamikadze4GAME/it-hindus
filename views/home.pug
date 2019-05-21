@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1 All courses
+  if user
+    a.btn.btn-raised(href='/courses/new', role='button', style='float:right;') Create new
+  p.lead All courses on site
+  hr
+  .row
+    each course in courses
+      .col-md-6
+        h2= course.title
+        p= course.desc || 'No-desc'
+        if course.createdBy
+          if course.createdBy.id
+            p Created by #{course.createdBy && course.createdBy.profile ? course.createdBy.profile.firstname : course.createdBy.id}
+        p
+          a.btn.btn-raised(href='/courses/'+course.id, role='button') View details »

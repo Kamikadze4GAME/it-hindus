@@ -1,0 +1,11 @@
+extends ../layout
+
+block content
+  a.btn.btn-raised(href='#', role='button', style='float:right;') Edit
+  h1 Course "#{course.title}"
+  hr
+  .row
+    .col-md-12
+      h2= 'Title: '  + (course.title || '<empty>')
+      p= 'Description: '  + (course.desc || '<empty>')
+      p= 'Created by: ' + (course.createdBy && course.createdBy.profile ? course.createdBy.profile.firstname + ' ' + course.createdBy.profile.lastname : '<empty>')
