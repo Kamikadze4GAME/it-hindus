@@ -1,0 +1,30 @@
+extends ../layout.bare.pug
+
+block variables
+  - var __title__ = 'SignIn'
+  - var __page__ = 'signin'
+
+
+block content
+  .middle-box.text-center.loginscreen.animated.fadeInDown
+    div
+      div
+        h1.logo-name IT-h
+      h3 Welcome to IT-h
+      p
+        | New coursera!
+      p Login in. To see it in action.
+      form.m-t(role='form', action='/signin', method='POST')
+        input.form-control(type='hidden', name='_csrf', value=_csrf)
+        .form-group
+          input.form-control(type='email', name='email', placeholder='Username', required='')
+        .form-group
+          input.form-control(type='password', name='password', placeholder='Password', required='')
+        button.btn.btn-primary.block.full-width.m-b(type='submit') SignIn
+        //- a(href='#')
+        //-   small Forgot password?
+        p.text-muted.text-center
+          small Do not have an account?
+        a.btn.btn-sm.btn-white.btn-block(href='/signup') Create an account
+      p.m-t
+        small small IT-hindus © 2019

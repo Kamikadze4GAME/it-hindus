@@ -1,0 +1,294 @@
+extends ../layout
+
+block variables
+  - var __title__ = 'Course list'
+  - var __page__ = 'courses:list'
+  - var __pages__ = __page__.split(':')
+  - var __breadcrumb__ = [{title:'Home', link:'/'}]
+
+block content
+  .wrapper.wrapper-content.animated.fadeInUp
+    .ibox
+      .ibox-title
+        h5 All projects assigned to this account
+        .ibox-tools
+          a.btn.btn-primary.btn-xs(href='/courses/create') Create new project
+      .ibox-content
+        .project-list
+          //- p !{JSON.stringify(courses)}
+          table.table.table-hover
+            tbody
+              each course in courses
+                tr
+                  td.project-status
+                    span.label.label-primary Active
+                  td.project-title
+                    a(href='/courses/'+course.id, role='button') #{course.title}
+                    br
+                    small Created 14.08.2014
+                  //- td.project-completion
+                    small Completion with: 48%
+                    .progress.progress-mini
+                      .progress-bar(style='width: 48%;')
+                  //- td.project-people
+                    a(href='')
+                      img.rounded-circle(alt='image', src='img/a3.jpg')
+                    a(href='')
+                      img.rounded-circle(alt='image', src='img/a1.jpg')
+                    a(href='')
+                      img.rounded-circle(alt='image', src='img/a2.jpg')
+                    a(href='')
+                      img.rounded-circle(alt='image', src='img/a4.jpg')
+                    a(href='')
+                      img.rounded-circle(alt='image', src='img/a5.jpg')
+                  td.project-actions
+                    a.btn.btn-white.btn-sm(href='/courses/' + course._id)
+                      i.fa.fa-folder
+                      |  View
+                    //- a.btn.btn-white.btn-sm(href='#')
+                    //-   i.fa.fa-pencil
+                    //-   |  Edit
+          //- table.table.table-hover
+            tbody
+              tr
+                td.project-status
+                  span.label.label-primary Active
+                td.project-title
+                  a(href='project_detail.html') There are many variations of passages
+                  br
+                  small Created 11.08.2014
+                td.project-completion
+                  small Completion with: 28%
+                  .progress.progress-mini
+                    .progress-bar(style='width: 28%;')
+                td.project-people
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a7.jpg')
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a6.jpg')
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a3.jpg')
+                td.project-actions
+                  a.btn.btn-white.btn-sm(href='#')
+                    i.fa.fa-folder
+                    |  View
+                  a.btn.btn-white.btn-sm(href='#')
+                    i.fa.fa-pencil
+                    |  Edit
+              tr
+                td.project-status
+                  span.label.label-default Unactive
+                td.project-title
+                  a(href='project_detail.html') Many desktop publishing packages and web
+                  br
+                  small Created 10.08.2014
+                td.project-completion
+                  small Completion with: 8%
+                  .progress.progress-mini
+                    .progress-bar(style='width: 8%;')
+                td.project-people
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a5.jpg')
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a3.jpg')
+                td.project-actions
+                  a.btn.btn-white.btn-sm(href='#')
+                    i.fa.fa-folder
+                    |  View
+                  a.btn.btn-white.btn-sm(href='#')
+                    i.fa.fa-pencil
+                    |  Edit
+              tr
+                td.project-status
+                  span.label.label-primary Active
+                td.project-title
+                  a(href='project_detail.html') Letraset sheets containing
+                  br
+                  small Created 22.07.2014
+                td.project-completion
+                  small Completion with: 83%
+                  .progress.progress-mini
+                    .progress-bar(style='width: 83%;')
+                td.project-people
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a2.jpg')
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a3.jpg')
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a1.jpg')
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a7.jpg')
+                td.project-actions
+                  a.btn.btn-white.btn-sm(href='#')
+                    i.fa.fa-folder
+                    |  View
+                  a.btn.btn-white.btn-sm(href='#')
+                    i.fa.fa-pencil
+                    |  Edit
+              tr
+                td.project-status
+                  span.label.label-primary Active
+                td.project-title
+                  a(href='project_detail.html') Contrary to popular belief
+                  br
+                  small Created 14.07.2014
+                td.project-completion
+                  small Completion with: 97%
+                  .progress.progress-mini
+                    .progress-bar(style='width: 97%;')
+                td.project-people
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a4.jpg')
+                td.project-actions
+                  a.btn.btn-white.btn-sm(href='#')
+                    i.fa.fa-folder
+                    |  View
+                  a.btn.btn-white.btn-sm(href='#')
+                    i.fa.fa-pencil
+                    |  Edit
+              tr
+                td.project-status
+                  span.label.label-primary Active
+                td.project-title
+                  a(href='project_detail.html') Contract with Zender Company
+                  br
+                  small Created 14.08.2014
+                td.project-completion
+                  small Completion with: 48%
+                  .progress.progress-mini
+                    .progress-bar(style='width: 48%;')
+                td.project-people
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a1.jpg')
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a2.jpg')
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a4.jpg')
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a5.jpg')
+                td.project-actions
+                  a.btn.btn-white.btn-sm(href='#')
+                    i.fa.fa-folder
+                    |  View
+                  a.btn.btn-white.btn-sm(href='#')
+                    i.fa.fa-pencil
+                    |  Edit
+              tr
+                td.project-status
+                  span.label.label-primary Active
+                td.project-title
+                  a(href='project_detail.html') There are many variations of passages
+                  br
+                  small Created 11.08.2014
+                td.project-completion
+                  small Completion with: 28%
+                  .progress.progress-mini
+                    .progress-bar(style='width: 28%;')
+                td.project-people
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a7.jpg')
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a6.jpg')
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a3.jpg')
+                td.project-actions
+                  a.btn.btn-white.btn-sm(href='#')
+                    i.fa.fa-folder
+                    |  View
+                  a.btn.btn-white.btn-sm(href='#')
+                    i.fa.fa-pencil
+                    |  Edit
+              tr
+                td.project-status
+                  span.label.label-default Unactive
+                td.project-title
+                  a(href='project_detail.html') Many desktop publishing packages and web
+                  br
+                  small Created 10.08.2014
+                td.project-completion
+                  small Completion with: 8%
+                  .progress.progress-mini
+                    .progress-bar(style='width: 8%;')
+                td.project-people
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a5.jpg')
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a3.jpg')
+                td.project-actions
+                  a.btn.btn-white.btn-sm(href='#')
+                    i.fa.fa-folder
+                    |  View
+                  a.btn.btn-white.btn-sm(href='#')
+                    i.fa.fa-pencil
+                    |  Edit
+              tr
+                td.project-status
+                  span.label.label-primary Active
+                td.project-title
+                  a(href='project_detail.html') Letraset sheets containing
+                  br
+                  small Created 22.07.2014
+                td.project-completion
+                  small Completion with: 83%
+                  .progress.progress-mini
+                    .progress-bar(style='width: 83%;')
+                td.project-people
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a2.jpg')
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a3.jpg')
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a1.jpg')
+                td.project-actions
+                  a.btn.btn-white.btn-sm(href='#')
+                    i.fa.fa-folder
+                    |  View
+                  a.btn.btn-white.btn-sm(href='#')
+                    i.fa.fa-pencil
+                    |  Edit
+              tr
+                td.project-status
+                  span.label.label-primary Active
+                td.project-title
+                  a(href='project_detail.html') Contrary to popular belief
+                  br
+                  small Created 14.07.2014
+                td.project-completion
+                  small Completion with: 97%
+                  .progress.progress-mini
+                    .progress-bar(style='width: 97%;')
+                td.project-people
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a4.jpg')
+                td.project-actions
+                  a.btn.btn-white.btn-sm(href='#')
+                    i.fa.fa-folder
+                    |  View
+                  a.btn.btn-white.btn-sm(href='#')
+                    i.fa.fa-pencil
+                    |  Edit
+              tr
+                td.project-status
+                  span.label.label-primary Active
+                td.project-title
+                  a(href='project_detail.html') There are many variations of passages
+                  br
+                  small Created 11.08.2014
+                td.project-completion
+                  small Completion with: 28%
+                  .progress.progress-mini
+                    .progress-bar(style='width: 28%;')
+                td.project-people
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a7.jpg')
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a6.jpg')
+                  a(href='')
+                    img.rounded-circle(alt='image', src='img/a3.jpg')
+                td.project-actions
+                  a.btn.btn-white.btn-sm(href='#')
+                    i.fa.fa-folder
+                    |  View
+                  a.btn.btn-white.btn-sm(href='#')
+                    i.fa.fa-pencil
+                    |  Edit

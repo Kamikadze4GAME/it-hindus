@@ -1,21 +1,47 @@
 const { promisify } = require('util');
 const _ = require('lodash');
 const Course = require('../models/Course');
+const Module = require('../models/Module');
+const Lesson = require('../models/Lesson');
 const mongodb = require('mongodb');
 /**
  * GET /courses
  */
+exports.getCourseList = (req, res, next) => {
+  if (!req.user) {
+    return res.redirect('/');
+  }
+
+  return Course.find()
+    // .populate('createdBy modules')
+    .then(courses => {
+      // console.log('courses/list', courses);
+
+      return res.render('course/list', {
+        // title: 'Courses',
+        courses: courses
+      });
+    })
+    .catch(_ => next(_))
+    ;
+}
+
 exports.getCourse = (req, res, next) => {
   if (!req.user) {
     return res.redirect('/');
   }
 
-  return Course.findOne({_id: mongodb.ObjectID(req.params.course_id)}).populate('createdBy')
+  return Course.findOne({_id: mongodb.ObjectID(req.params.course_id)})
+    // .populate('createdBy modules')
     .then(course => {
-      console.log('course', course);
+      if(!course) {
+        req.flash('errors', [{msg: `No such course with ID: ${req.params.course_id}`}]);
+        return res.redirect('/courses');
+      }
+
 
       return res.render('course/full', {
-        title: 'Courses',
+        // title: 'Courses',
         course: course
       });
     })
@@ -41,18 +67,18 @@ exports.getCourses = (req, res, next) => {
     ;
 };
 
-exports.getNewCourse = (req, res, next) => {
+exports.getCreateCourse = (req, res, next) => {
   if (!req.user) {
     return res.redirect('/');
   }
 
-  return res.render('course/new', {
+  return res.render('course/create', {
     title: 'New course',
     // courses: courses || []
   });
 };
 
-exports.postNewCourse = (req, res, next) => {
+exports.postCreateCourse = (req, res, next) => {
   if (!req.user) {
     return res.redirect('/');
   }
@@ -63,13 +89,13 @@ exports.postNewCourse = (req, res, next) => {
 
   if (errors) {
     req.flash('errors', errors);
-    return res.redirect('/course/new');
+    return res.redirect('/course/create');
   }
 
   const course = new Course({
     title: req.body.title,
     desc: req.body.desc,
-    createdBy: req.user.id
+    createdBy: req.user._id
   });
 
   return course.save()

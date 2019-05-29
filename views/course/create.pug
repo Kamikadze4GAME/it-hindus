@@ -1,0 +1,133 @@
+extends ../layout
+
+block variables
+  - var __title__ = 'Create new course'
+  - var __page__ = 'courses:create'
+  - var __pages__ = __page__.split(':')
+  - var __breadcrumb__ = [{title:'Home', link:'/'}, {title:'Course list', link:'/courses'}]
+
+
+block content
+  .wrapper.wrapper-content.animated.fadeInRight
+    .row
+      .col-lg-12
+        .ibox
+          .ibox-title
+            h5 Create new course
+          .ibox-content
+            //- h2 Validation Wizard Form
+            //- p This example show how to use Steps with jQuery Validation plugin.
+            form#form.wizard-big(action='#')
+              h1 Basic course info
+              fieldset
+                h2 Basic course info
+                .row
+                  .col-lg-8
+                    .form-group
+                      label Title
+                      input#title.form-control.required(name='title', type='text')
+                    .form-group
+                      label Description
+                      input#desc.form-control.required(name='desc', type='text')
+                  .col-lg-4
+                    .text-center
+                      div(style='margin-top: 20px;')
+                        i.fa.fa-sign-in(style='font-size: 180px;color: #e5e5e5 ;')
+              h1 Modules
+              fieldset
+                h2 Profile Information
+                .row
+                  .col-lg-6
+                    .form-group
+                      label First name *
+                      input#name.form-control.required(name='name', type='text')
+                    .form-group
+                      label Last name *
+                      input#surname.form-control.required(name='surname', type='text')
+                  .col-lg-6
+                    .form-group
+                      label Email *
+                      input#email.form-control.required.email(name='email', type='text')
+                    .form-group
+                      label Address *
+                      input#address.form-control(name='address', type='text')
+              h1 Warning
+              fieldset
+                .text-center(style='margin-top: 120px;')
+                  h2 You did it Man :-)
+              h1 Finish
+              fieldset
+                h2 Terms and Conditions
+                input#acceptTerms.required(name='acceptTerms', type='checkbox')
+                label(for='acceptTerms') I agree with the Terms and Conditions.
+
+block scripts
+  script.
+    $(document).ready(function() {
+      $("#wizard").steps();
+      $("#form").steps({
+        bodyTag: "fieldset",
+        onStepChanging: function(event, currentIndex, newIndex) {
+          // Always allow going backward even if the current step contains invalid fields!
+          if (currentIndex > newIndex) {
+            return true;
+          }
+
+          // Forbid suppressing "Warning" step if the user is to young
+          if (newIndex === 3 && Number($("#age").val()) < 18) {
+            return false;
+          }
+
+          var form = $(this);
+
+          // Clean up if user went backward before
+          if (currentIndex < newIndex) {
+            // To remove error styles
+            $(".body:eq(" + newIndex + ") label.error", form).remove();
+            $(".body:eq(" + newIndex + ") .error", form).removeClass("error");
+          }
+
+          // Disable validation on fields that are disabled or hidden.
+          form.validate().settings.ignore = ":disabled,:hidden";
+
+          // Start validation; Prevent going forward if false
+          return form.valid();
+        },
+        onStepChanged: function(event, currentIndex, priorIndex) {
+          // Suppress (skip) "Warning" step if the user is old enough.
+          if (currentIndex === 2 && Number($("#age").val()) >= 18) {
+            $(this).steps("next");
+          }
+
+          // Suppress (skip) "Warning" step if the user is old enough and wants to the previous step.
+          if (currentIndex === 2 && priorIndex === 3) {
+            $(this).steps("previous");
+          }
+        },
+        onFinishing: function(event, currentIndex) {
+          var form = $(this);
+
+          // Disable validation on fields that are disabled.
+          // At this point it's recommended to do an overall check (mean ignoring only disabled fields)
+          form.validate().settings.ignore = ":disabled";
+
+          // Start validation; Prevent form submission if false
+          return form.valid();
+        },
+        onFinished: function(event, currentIndex) {
+          var form = $(this);
+
+          // Submit form input
+          form.submit();
+        }
+      }).validate({
+        errorPlacement: function(error, element) {
+          element.before(error);
+        },
+        rules: {
+          confirm: {
+            /* equalTo: "#password" */
+          }
+        }
+      });
+    });

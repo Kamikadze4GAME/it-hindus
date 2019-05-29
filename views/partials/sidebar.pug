@@ -1,0 +1,385 @@
+nav.navbar-default.navbar-static-side(role='navigation')
+  .sidebar-collapse
+    ul#side-menu.nav.metismenu
+      li.nav-header
+        .dropdown.profile-element
+          img.rounded-circle(alt='image', src=user.gravatar(), style='max-width:48px;')
+          a(href='#')
+            span.block.m-t-xs.font-bold #{user.profile.firstname} #{user.profile.lastname}
+            span.text-muted.text-xs.block
+              | #{user.profile.group || 'group?'}
+          //- a.dropdown-toggle(data-toggle='dropdown', href='#')
+          //-   span.block.m-t-xs.font-bold #{user.profile.firstname} #{user.profile.lastname}
+          //-   span.text-muted.text-xs.block
+          //-     | #{user.profile.group || 'group?'}
+          //-     b.caret
+          //- ul.dropdown-menu.animated.fadeInRight.m-t-xs
+          //-   li
+          //-     a.dropdown-item(href='profile.html') Profile
+          //-   li
+          //-     a.dropdown-item(href='contacts.html') Contacts
+          //-   li
+          //-     a.dropdown-item(href='mailbox.html') Mailbox
+          //-   li.dropdown-divider
+          //-   li
+          //-     a.dropdown-item(href='login.html') Logout
+        .logo-element
+          | IT-h
+      
+      li(class= __page__ === 'home' ? 'active' : '')
+        a(href='/')
+          i.fa.fa-th-large
+          span.nav-label Home
+      
+      li(class= __page__ === 'profile' ? 'active' : '')
+        a(href='/profile')
+          i.fa.fa-diamond
+          span.nav-label Profile
+      
+      li(class= __page__ === 'courses' ||  (__pages__ && __pages__[0] === 'courses') ? 'active' : '')
+        a(href='/courses')
+          i.fa.fa-sitemap
+          span.nav-label Courses
+          span.fa.arrow
+        ul.nav.nav-second-level.collapse
+          li(class= __page__ === 'courses:list' ? 'active' : '')
+            a(href='/courses') Full list
+          li(class= __page__ === 'courses:create' ? 'active' : '')
+            a(href='/courses/create') Create new
+          li
+            a(href='#') Second Level Item
+
+    //- ul.nav.metismenu
+      li
+        a(href='index.html')
+          i.fa.fa-th-large
+          span.nav-label Dashboards
+          span.fa.arrow
+        ul.nav.nav-second-level
+          li.active
+            a(href='index.html') Dashboard v.1
+          li
+            a(href='dashboard_2.html') Dashboard v.2
+          li
+            a(href='dashboard_3.html') Dashboard v.3
+          li
+            a(href='dashboard_4_1.html') Dashboard v.4
+          li
+            a(href='dashboard_5.html') Dashboard v.5 
+      li
+        a(href='layouts.html')
+          i.fa.fa-diamond
+          span.nav-label Layouts
+      li
+        a(href='#')
+          i.fa.fa-bar-chart-o
+          span.nav-label Graphs
+          span.fa.arrow
+        ul.nav.nav-second-level.collapse
+          li
+            a(href='graph_flot.html') Flot Charts
+          li
+            a(href='graph_morris.html') Morris.js Charts
+          li
+            a(href='graph_rickshaw.html') Rickshaw Charts
+          li
+            a(href='graph_chartjs.html') Chart.js
+          li
+            a(href='graph_chartist.html') Chartist
+          li
+            a(href='c3.html') c3 charts
+          li
+            a(href='graph_peity.html') Peity Charts
+          li
+            a(href='graph_sparkline.html') Sparkline Charts
+      li
+        a(href='mailbox.html')
+          i.fa.fa-envelope
+          span.nav-label Mailbox 
+          span.label.label-warning.float-right 16/24
+        ul.nav.nav-second-level.collapse
+          li
+            a(href='mailbox.html') Inbox
+          li
+            a(href='mail_detail.html') Email view
+          li
+            a(href='mail_compose.html') Compose email
+          li
+            a(href='email_template.html') Email templates
+      li
+        a(href='metrics.html')
+          i.fa.fa-pie-chart
+          span.nav-label Metrics
+      li
+        a(href='widgets.html')
+          i.fa.fa-flask
+          span.nav-label Widgets
+      li
+        a(href='#')
+          i.fa.fa-edit
+          span.nav-label Forms
+          span.fa.arrow
+        ul.nav.nav-second-level.collapse
+          li
+            a(href='form_basic.html') Basic form
+          li
+            a(href='form_advanced.html') Advanced Plugins
+          li
+            a(href='form_wizard.html') Wizard
+          li
+            a(href='form_file_upload.html') File Upload
+          li
+            a(href='form_editors.html') Text Editor
+          li
+            a(href='form_autocomplete.html') Autocomplete
+          li
+            a(href='form_markdown.html') Markdown
+      li
+        a(href='#')
+          i.fa.fa-desktop
+          span.nav-label App Views
+          span.float-right.label.label-primary SPECIAL
+        ul.nav.nav-second-level.collapse
+          li
+            a(href='contacts.html') Contacts
+          li
+            a(href='profile.html') Profile
+          li
+            a(href='profile_2.html') Profile v.2
+          li
+            a(href='contacts_2.html') Contacts v.2
+          li
+            a(href='projects.html') Projects
+          li
+            a(href='project_detail.html') Project detail
+          li
+            a(href='activity_stream.html') Activity stream
+          li
+            a(href='teams_board.html') Teams board
+          li
+            a(href='social_feed.html') Social feed
+          li
+            a(href='clients.html') Clients
+          li
+            a(href='full_height.html') Outlook view
+          li
+            a(href='vote_list.html') Vote list
+          li
+            a(href='file_manager.html') File manager
+          li
+            a(href='calendar.html') Calendar
+          li
+            a(href='issue_tracker.html') Issue tracker
+          li
+            a(href='blog.html') Blog
+          li
+            a(href='article.html') Article
+          li
+            a(href='faq.html') FAQ
+          li
+            a(href='timeline.html') Timeline
+          li
+            a(href='pin_board.html') Pin board
+      li
+        a(href='#')
+          i.fa.fa-files-o
+          span.nav-label Other Pages
+          span.fa.arrow
+        ul.nav.nav-second-level.collapse
+          li
+            a(href='search_results.html') Search results
+          li
+            a(href='lockscreen.html') Lockscreen
+          li
+            a(href='invoice.html') Invoice
+          li
+            a(href='login.html') Login
+          li
+            a(href='login_two_columns.html') Login v.2
+          li
+            a(href='forgot_password.html') Forget password
+          li
+            a(href='register.html') Register
+          li
+            a(href='404.html') 404 Page
+          li
+            a(href='500.html') 500 Page
+          li
+            a(href='empty_page.html') Empty page
+      li
+        a(href='#')
+          i.fa.fa-globe
+          span.nav-label Miscellaneous
+          span.label.label-info.float-right NEW
+        ul.nav.nav-second-level.collapse
+          li
+            a(href='toastr_notifications.html') Notification
+          li
+            a(href='nestable_list.html') Nestable list
+          li
+            a(href='agile_board.html') Agile board
+          li
+            a(href='timeline_2.html') Timeline v.2
+          li
+            a(href='diff.html') Diff
+          li
+            a(href='pdf_viewer.html') PDF viewer
+          li
+            a(href='i18support.html') i18 support
+          li
+            a(href='sweetalert.html') Sweet alert
+          li
+            a(href='idle_timer.html') Idle timer
+          li
+            a(href='truncate.html') Truncate
+          li
+            a(href='password_meter.html') Password meter
+          li
+            a(href='spinners.html') Spinners
+          li
+            a(href='spinners_usage.html') Spinners usage
+          li
+            a(href='tinycon.html') Live favicon
+          li
+            a(href='google_maps.html') Google maps
+          li
+            a(href='datamaps.html') Datamaps
+          li
+            a(href='social_buttons.html') Social buttons
+          li
+            a(href='code_editor.html') Code editor
+          li
+            a(href='modal_window.html') Modal window
+          li
+            a(href='clipboard.html') Clipboard
+          li
+            a(href='text_spinners.html') Text spinners
+          li
+            a(href='forum_main.html') Forum view
+          li
+            a(href='validation.html') Validation
+          li
+            a(href='tree_view.html') Tree view
+          li
+            a(href='loading_buttons.html') Loading buttons
+          li
+            a(href='chat_view.html') Chat view
+          li
+            a(href='masonry.html') Masonry
+          li
+            a(href='tour.html') Tour
+      li
+        a(href='#')
+          i.fa.fa-flask
+          span.nav-label UI Elements
+          span.fa.arrow
+        ul.nav.nav-second-level.collapse
+          li
+            a(href='typography.html') Typography
+          li
+            a(href='icons.html') Icons
+          li
+            a(href='draggable_panels.html') Draggable Panels
+          li
+            a(href='resizeable_panels.html') Resizeable Panels
+          li
+            a(href='buttons.html') Buttons
+          li
+            a(href='video.html') Video
+          li
+            a(href='tabs_panels.html') Panels
+          li
+            a(href='tabs.html') Tabs
+          li
+            a(href='notifications.html') Notifications & Tooltips
+          li
+            a(href='helper_classes.html') Helper css classes
+          li
+            a(href='badges_labels.html') Badges, Labels, Progress
+      li
+        a(href='grid_options.html')
+          i.fa.fa-laptop
+          span.nav-label Grid options
+      li
+        a(href='#')
+          i.fa.fa-table
+          span.nav-label Tables
+          span.fa.arrow
+        ul.nav.nav-second-level.collapse
+          li
+            a(href='table_basic.html') Static Tables
+          li
+            a(href='table_data_tables.html') Data Tables
+          li
+            a(href='table_foo_table.html') Foo Tables
+          li
+            a(href='jq_grid.html') jqGrid
+      li
+        a(href='#')
+          i.fa.fa-shopping-cart
+          span.nav-label E-commerce
+          span.fa.arrow
+        ul.nav.nav-second-level.collapse
+          li
+            a(href='ecommerce_products_grid.html') Products grid
+          li
+            a(href='ecommerce_product_list.html') Products list
+          li
+            a(href='ecommerce_product.html') Product edit
+          li
+            a(href='ecommerce_product_detail.html') Product detail
+          li
+            a(href='ecommerce-cart.html') Cart
+          li
+            a(href='ecommerce-orders.html') Orders
+          li
+            a(href='ecommerce_payments.html') Credit Card form
+      li
+        a(href='#')
+          i.fa.fa-picture-o
+          span.nav-label Gallery
+          span.fa.arrow
+        ul.nav.nav-second-level.collapse
+          li
+            a(href='basic_gallery.html') Lightbox Gallery
+          li
+            a(href='slick_carousel.html') Slick Carousel
+          li
+            a(href='carousel.html') Bootstrap Carousel
+      li
+        a(href='#')
+          i.fa.fa-sitemap
+          span.nav-label Menu Levels 
+          span.fa.arrow
+        ul.nav.nav-second-level.collapse
+          li
+            a#damian(href='#')
+              | Third Level 
+              span.fa.arrow
+            ul.nav.nav-third-level
+              li
+                a(href='#') Third Level Item
+              li
+                a(href='#') Third Level Item
+              li
+                a(href='#') Third Level Item
+          li
+            a(href='#') Second Level Item
+          li
+            a(href='#') Second Level Item
+          li
+            a(href='#') Second Level Item
+      li
+        a(href='css_animation.html')
+          i.fa.fa-magic
+          span.nav-label CSS Animations 
+          span.label.label-info.float-right 62
+      li.landing_link
+        a(target='_blank', href='landing.html')
+          i.fa.fa-star
+          span.nav-label Landing Page
+          span.label.label-warning.float-right NEW
+      li.special_link
+        a(href='package.html')
+          i.fa.fa-database
+          span.nav-label Package

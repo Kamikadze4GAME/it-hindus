@@ -20,9 +20,9 @@ const passport = require('passport');
 const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
-const multer = require('multer');
+// const multer = require('multer');
 
-const upload = multer({ dest: path.join(__dirname, 'uploads') });
+// const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -30,18 +30,24 @@ const upload = multer({ dest: path.join(__dirname, 'uploads') });
 dotenv.config({ path: '.env.example' });
 
 /**
- * Controllers (route handlers).
+ * Router
  */
-const homeController = require('./controllers/home');
-const userController = require('./controllers/user');
-const apiController = require('./controllers/api');
-const courseController = require('./controllers/course');
-const contactController = require('./controllers/contact');
 
-/**
- * API keys and Passport configuration.
- */
-const passportConfig = require('./config/passport');
+const router = require('./router');
+
+// /**
+//  * Controllers (route handlers).
+//  */
+// const homeController = require('./controllers/home');
+// const userController = require('./controllers/user');
+// const apiController = require('./controllers/api');
+// const courseController = require('./controllers/course');
+// const contactController = require('./controllers/contact');
+//
+// /**
+//  * API keys and Passport configuration.
+//  */
+// const passportConfig = require('./config/passport');
 
 /**
  * Create Express server.
@@ -77,6 +83,7 @@ app.use(sass({
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(expressValidator());
 app.use(session({
   resave: true,
@@ -91,80 +98,83 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-app.use((req, res, next) => {
-  if (req.path === '/api/upload') {
-    next();
-  } else {
-    lusca.csrf()(req, res, next);
-  }
-});
-app.use(lusca.xframe('SAMEORIGIN'));
-app.use(lusca.xssProtection(true));
+
+// app.use((req, res, next) => {
+//   if (req.path === '/upload') {
+//     next();
+//   } else {
+//     lusca.csrf()(req, res, next);
+//   }
+// });
+app.use(lusca({
+  csrf: true,
+  // csp: { /* ... */},
+  xframe: 'SAMEORIGIN',
+  p3p: 'ABCDEF',
+  // hsts: {maxAge: 31536000, includeSubDomains: true, preload: true},
+  xssProtection: true,
+  // nosniff: true,
+  // referrerPolicy: 'same-origin'
+}));
+// app.use(lusca.xframe('SAMEORIGIN'));
+// app.use(lusca.xssProtection(true));
 app.disable('x-powered-by');
 app.use((req, res, next) => {
   res.locals.user = req.user;
+  console.log(req.user, {depth:null})
   next();
 });
 
-app.use((req, res, next) => {
-  // After successful login, redirect back to the intended page
-  if (!req.user
-    && req.path !== '/login'
-    && req.path !== '/signup'
-    && !req.path.match(/^\/auth/)
-    && !req.path.match(/\./)) {
-    req.session.returnTo = req.originalUrl;
-  } else if (req.user
-    && (req.path === '/account' || req.path.match(/^\/api/))) {
-    req.session.returnTo = req.originalUrl;
-  }
-  next();
-});
 app.use('/', express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
-app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/chart.js/dist'), { maxAge: 31557600000 }));
-app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/popper.js/dist/umd'), { maxAge: 31557600000 }));
-app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js'), { maxAge: 31557600000 }));
-app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/jquery/dist'), { maxAge: 31557600000 }));
-app.use('/webfonts', express.static(path.join(__dirname, 'node_modules/@fortawesome/fontawesome-free/webfonts'), { maxAge: 31557600000 }));
+
+// app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/chart.js/dist'), { maxAge: 31557600000 }));
+// app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/popper.js/dist/umd'), { maxAge: 31557600000 }));
+// app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js'), { maxAge: 31557600000 }));
+// app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/jquery/dist'), { maxAge: 31557600000 }));
+// app.use('/webfonts', express.static(path.join(__dirname, 'node_modules/@fortawesome/fontawesome-free/webfonts'), { maxAge: 31557600000 }));
 
 /**
  * Primary app routes.
  */
-app.get('/', homeController.index);
-app.get('/login', userController.getLogin);
-app.post('/login', userController.postLogin);
-app.get('/logout', userController.logout);
-app.get('/forgot', userController.getForgot);
-app.post('/forgot', userController.postForgot);
-app.get('/reset/:token', userController.getReset);
-app.post('/reset/:token', userController.postReset);
-app.get('/signup', userController.getSignup);
-app.post('/signup', userController.postSignup);
-app.get('/contact', contactController.getContact);
-app.post('/contact', contactController.postContact);
-app.get('/account', passportConfig.isAuthenticated, userController.getAccount);
-app.post('/account/profile', passportConfig.isAuthenticated, userController.postUpdateProfile);
-app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
-app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
-app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
 
-/**
- * Courses examples routes.
- */
-app.get('/courses', passportConfig.isAuthenticated, courseController.getCourses);
-app.get('/courses/new', passportConfig.isAuthenticated, courseController.getNewCourse);
-app.post('/courses/new', passportConfig.isAuthenticated, courseController.postNewCourse);
-app.get('/courses/:course_id([0-9a-fA-F]{24})', passportConfig.isAuthenticated, courseController.getCourse);
+app.use('/', router);
+
+//
+// app.get('/', homeController.index);
+// app.get('/login', userController.getLogin);
+// app.post('/login', userController.postLogin);
+// app.get('/logout', userController.logout);
+// app.get('/forgot', userController.getForgot);
+// app.post('/forgot', userController.postForgot);
+// app.get('/reset/:token', userController.getReset);
+// app.post('/reset/:token', userController.postReset);
+// app.get('/signup', userController.getSignup);
+// app.post('/signup', userController.postSignup);
+// app.get('/contact', contactController.getContact);
+// app.post('/contact', contactController.postContact);
+// app.get('/account', passportConfig.isAuthenticated, userController.getAccount);
+// app.post('/account/profile', passportConfig.isAuthenticated, userController.postUpdateProfile);
+// app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
+// app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
+// app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
+//
+// /**
+//  * Courses examples routes.
+//  */
+// app.get('/courses', passportConfig.isAuthenticated, courseController.getCourses);
+// app.get('/courses/new', passportConfig.isAuthenticated, courseController.getNewCourse);
+// app.post('/courses/new', passportConfig.isAuthenticated, courseController.postNewCourse);
+// app.get('/courses/:course_id([0-9a-fA-F]{24})', passportConfig.isAuthenticated, courseController.getCourse);
+// // app.get('/api/upload', apiController.getFileUpload);
+// // app.post('/api/upload', upload.single('myFile'), apiController.postFileUpload);
+//
+// /**
+//  * API examples routes.
+//  */
+// app.get('/api', apiController.getApi);
 // app.get('/api/upload', apiController.getFileUpload);
 // app.post('/api/upload', upload.single('myFile'), apiController.postFileUpload);
-
-/**
- * API examples routes.
- */
-app.get('/api', apiController.getApi);
-app.get('/api/upload', apiController.getFileUpload);
-app.post('/api/upload', upload.single('myFile'), apiController.postFileUpload);
-
+//
 
 /**
  * Error Handler.

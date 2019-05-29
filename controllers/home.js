@@ -10,7 +10,7 @@ const mongodb = require('mongodb');
 
   Course.find({}).populate('createdBy')
      .then(courses => {
-       console.log('courses', courses);
+       // console.log('courses', courses);
 
        return res.render('home', {
          title: 'Home',

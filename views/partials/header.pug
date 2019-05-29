@@ -1,41 +1,97 @@
-.navbar.navbar-light.fixed-top.navbar-expand-lg
-  .container
-    a.navbar-brand(href='/')
-      i.fas.fa-lightbulb
-      | IT-hindus
-    button.navbar-toggler(type='button', data-toggle='collapse', data-target='.navbar-collapse')
-      span.sr-only Toggle navigation
-      span.navbar-toggler-icon
-    .collapse.navbar-collapse
-      ul.nav.navbar-nav
-        li.nav-item(class=(title === 'Home') ? 'active' : undefined)
-          a.nav-link(href='/') Home
-        if user
-          li.nav-item(class=(title === 'Courses') ? 'active' : undefined)
-            a.nav-link(href='/courses') Courses
-          
-        li.nav-item(class=(title === 'Contact') ? 'active' : undefined)
-          a.nav-link(href='/contact') Contact
-        li.nav-item(class=(title === 'Status') ? 'active' : undefined)
-          a.nav-link(href='/status') Status
-      ul.nav.navbar-nav.ml-auto
-        if !user
-          li.nav-item(class=(title === 'Login') ? 'active' : undefined)
-            a.nav-link(href='/login') Login
-          li.nav-item(class=(title === 'Create Account') ? 'active' : undefined)
-            a.nav-link(href='/signup') Create Account
-        else
-          li.dropdown(class=(title === 'Account Management') ? 'active' : undefined).nav-item
-            a.dropdown-toggle.nav-link(href='#', data-toggle='dropdown')
-              if user.profile.picture
-                img(src=user.profile.picture)
-              else
-                img(src=user.gravatar(60))
-              span= user.profile.firstname || user.profile.lastname || user.email || user.id
-              i.caret
-            ul.dropdown-menu
-              li.dropdown-item
-                a(href='/account') My Account
-              li.divider.dropdown-item
-              li.dropdown-item
-                a(href='/logout') Logout
+nav.navbar.navbar-static-top(role='navigation', style='margin-bottom: 0')
+  .navbar-header
+    a.navbar-minimalize.minimalize-styl-2.btn.btn-primary(href='#')
+      i.fa.fa-bars
+    //- form.navbar-form-custom(role='search', action='search_results.html')
+      .form-group
+        input#top-search.form-control(type='text', placeholder='Search for something...', name='top-search')
+  ul.nav.navbar-top-links.navbar-right
+    li(style='padding: 20px')
+      span.m-r-sm.text-muted.welcome-message Welcome to IT-hindus
+    //- li.dropdown
+      a.dropdown-toggle.count-info(data-toggle='dropdown', href='#')
+        i.fa.fa-envelope
+        span.label.label-warning 16
+      ul.dropdown-menu.dropdown-messages.dropdown-menu-right
+        li
+          .dropdown-messages-box
+            a.dropdown-item.float-left(href='profile.html')
+              img.rounded-circle(alt='image', src='img/a7.jpg')
+            .media-body
+              small.float-right 46h ago
+              strong Mike Loreipsum
+              |  started following 
+              strong Monica Smith
+              | . 
+              br
+              small.text-muted 3 days ago at 7:58 pm - 10.06.2014
+        li.dropdown-divider
+        li
+          .dropdown-messages-box
+            a.dropdown-item.float-left(href='profile.html')
+              img.rounded-circle(alt='image', src='img/a4.jpg')
+            .media-body
+              small.float-right.text-navy 5h ago
+              strong Chris Johnatan Overtunk
+              |  started following 
+              strong Monica Smith
+              | . 
+              br
+              small.text-muted Yesterday 1:21 pm - 11.06.2014
+        li.dropdown-divider
+        li
+          .dropdown-messages-box
+            a.dropdown-item.float-left(href='profile.html')
+              img.rounded-circle(alt='image', src='img/profile.jpg')
+            .media-body
+              small.float-right 23h ago
+              strong Monica Smith
+              |  love 
+              strong Kim Smith
+              | . 
+              br
+              small.text-muted 2 days ago at 2:30 am - 11.06.2014
+        li.dropdown-divider
+        li
+          .text-center.link-block
+            a.dropdown-item(href='mailbox.html')
+              i.fa.fa-envelope
+              strong Read All Messages
+    //- li.dropdown
+      a.dropdown-toggle.count-info(data-toggle='dropdown', href='#')
+        i.fa.fa-bell
+        span.label.label-primary 8
+      ul.dropdown-menu.dropdown-alerts
+        li
+          a.dropdown-item(href='mailbox.html')
+            div
+              i.fa.fa-envelope.fa-fw
+              |  You have 16 messages
+              span.float-right.text-muted.small 4 minutes ago
+        li.dropdown-divider
+        li
+          a.dropdown-item(href='profile.html')
+            div
+              i.fa.fa-twitter.fa-fw
+              |  3 New Followers
+              span.float-right.text-muted.small 12 minutes ago
+        li.dropdown-divider
+        li
+          a.dropdown-item(href='grid_options.html')
+            div
+              i.fa.fa-upload.fa-fw
+              |  Server Rebooted
+              span.float-right.text-muted.small 4 minutes ago
+        li.dropdown-divider
+        li
+          .text-center.link-block
+            a.dropdown-item(href='notifications.html')
+              strong See All Alerts
+              i.fa.fa-angle-right
+    li
+      a(href='/logout')
+        i.fa.fa-sign-out
+        |  Log out
+    //- li
+      a.right-sidebar-toggle
+        i.fa.fa-tasks

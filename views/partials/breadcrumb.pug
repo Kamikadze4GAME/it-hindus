@@ -1,0 +1,14 @@
+.col-lg-8
+  h2 #{__title__}
+  ol.breadcrumb
+    if __breadcrumb__
+      each crumb in __breadcrumb__
+        li.breadcrumb-item
+          a(href=crumb.link) #{crumb.title}
+    li.breadcrumb-item.active
+      strong #{__title__}
+  //- p !{JSON.stringify(user)}
+
+//- .col-lg-4
+  .title-action
+    a.btn.btn-primary(href='') Click

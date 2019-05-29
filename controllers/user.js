@@ -3,44 +3,41 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const passport = require('passport');
 const _ = require('lodash');
-const User = require('../models/User');
 
 const randomBytesAsync = promisify(crypto.randomBytes);
 
-/**
- * GET /login
- * Login page.
- */
-exports.getLogin = (req, res) => {
-  if (req.user) {
+const User = require('../models/User');
+
+
+
+
+exports.getSignin = (req, res) => {
+  if(req.user) {
     return res.redirect('/');
   }
-  res.render('account/login', {
-    title: 'Login'
+
+  return res.render('account/signin', {
+    title: 'SignIn'
   });
 };
 
-/**
- * POST /login
- * Sign in using email and password.
- */
-exports.postLogin = (req, res, next) => {
+exports.postSignin = (req, res, next) => {
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('password', 'Password cannot be blank').notEmpty();
   req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
   const errors = req.validationErrors();
 
-  if (errors) {
+  if(errors) {
     req.flash('errors', errors);
-    return res.redirect('/login');
+    return res.redirect('/signin');
   }
 
   passport.authenticate('local', (err, user, info) => {
     if (err) { return next(err); }
     if (!user) {
       req.flash('errors', info);
-      return res.redirect('/login');
+      return res.redirect('/signin');
     }
     req.logIn(user, (err) => {
       if (err) { return next(err); }
@@ -57,7 +54,9 @@ exports.postLogin = (req, res, next) => {
 exports.logout = (req, res) => {
   req.logout();
   req.session.destroy((err) => {
-    if (err) console.log('Error : Failed to destroy the session during logout.', err);
+    if(err) {
+      console.log('Error : Failed to destroy the session during logout.', err);
+    }
     req.user = null;
     res.redirect('/');
   });
@@ -72,7 +71,7 @@ exports.getSignup = (req, res) => {
     return res.redirect('/');
   }
   res.render('account/signup', {
-    title: 'Create Account'
+    title: 'SignUp'
   });
 };
 
@@ -86,7 +85,7 @@ exports.postSignup = (req, res, next) => {
   req.assert('lastname', 'Last-name is required').len(3);
   req.assert('group', 'Group is required').len(3);
   req.assert('password', 'Password must be at least 4 characters long').len(4);
-  req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+  req.assert('password2', 'Passwords do not match').equals(req.body.password);
   req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
   const errors = req.validationErrors();
@@ -97,11 +96,13 @@ exports.postSignup = (req, res, next) => {
   }
 
   const user = new User({
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    group: req.body.group,
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
+    profile: {
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      group: req.body.group
+    }
   });
 
   User.findOne({ email: req.body.email }, (err, existingUser) => {
@@ -128,7 +129,7 @@ exports.postSignup = (req, res, next) => {
  */
 exports.getAccount = (req, res) => {
   res.render('account/profile', {
-    title: 'Account Management'
+    title: 'My account'
   });
 };
 
@@ -141,14 +142,14 @@ exports.postUpdateProfile = (req, res, next) => {
   req.assert('firstname', 'First-name is required').len(3);
   req.assert('lastname', 'Last-name is required').len(3);
   req.assert('group', 'Group is required').len(3);
-  
+
   req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
   const errors = req.validationErrors();
 
   if (errors) {
     req.flash('errors', errors);
-    return res.redirect('/account');
+    return res.redirect('/profile');
   }
 
   User.findById(req.user.id, (err, user) => {
@@ -160,30 +161,30 @@ exports.postUpdateProfile = (req, res, next) => {
     user.save((err) => {
       if (err) {
         if (err.code === 11000) {
-          req.flash('errors', { msg: 'The email address you have entered is already associated with an account.' });
-          return res.redirect('/account');
+          req.flash('errors', { msg: 'The email address you have entered is already associated with an profile.' });
+          return res.redirect('/profile');
         }
         return next(err);
       }
       req.flash('success', { msg: 'Profile information has been updated.' });
-      res.redirect('/account');
+      res.redirect('/profile');
     });
   });
 };
 
 /**
- * POST /account/password
+ * POST /profile/password
  * Update current password.
  */
 exports.postUpdatePassword = (req, res, next) => {
   req.assert('password', 'Password must be at least 4 characters long').len(4);
-  req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+  req.assert('password2', 'Passwords do not match').equals(req.body.password);
 
   const errors = req.validationErrors();
 
   if (errors) {
     req.flash('errors', errors);
-    return res.redirect('/account');
+    return res.redirect('/profile');
   }
 
   User.findById(req.user.id, (err, user) => {
@@ -192,14 +193,14 @@ exports.postUpdatePassword = (req, res, next) => {
     user.save((err) => {
       if (err) { return next(err); }
       req.flash('success', { msg: 'Password has been changed.' });
-      res.redirect('/account');
+      res.redirect('/profile');
     });
   });
 };
 
 /**
- * POST /account/delete
- * Delete user account.
+ * POST /profile/delete
+ * Delete user profile.
  */
 exports.postDeleteAccount = (req, res, next) => {
   User.deleteOne({ _id: req.user.id }, (err) => {

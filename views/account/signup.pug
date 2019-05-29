@@ -1,42 +1,39 @@
-extends ../layout
+extends ../layout.bare.pug
+
+block variables
+  - var __title__ = 'SignUp'
+  - var __page__ = 'signup'
 
 block content
-  .pb-2.mt-2.mb-4.border-bottom
-    h3 Sign up
-  form(id='signup-form', method='POST')
-    input(type='hidden', name='_csrf', value=_csrf)
-    
-    .form-group.row
-      label.col-md-3.col-form-label.font-weight-bold.text-right(for='email') Email
-      .col-md-7
-        input.form-control(type='email', name='email', id='email', placeholder='Email', autofocus, autocomplete='email', required)
-      
-    .form-group.row
-      label.col-md-3.col-form-label.font-weight-bold.text-right(for='firstname') Firstname
-      .col-md-7
-        input.form-control(type='input', name='firstname', id='firstname', placeholder='Firstname', autofocus, autocomplete='Ostap', required)
-          
-    .form-group.row
-      label.col-md-3.col-form-label.font-weight-bold.text-right(for='lastname') Lastname
-      .col-md-7
-        input.form-control(type='input', name='lastname', id='lastname', placeholder='lastname', autofocus, autocomplete='Bender', required)
-      
-    .form-group.row
-      label.col-md-3.col-form-label.font-weight-bold.text-right(for='group') Group
-      .col-md-7
-        input.form-control(type='input', name='group', id='group', placeholder='group', autofocus, autocomplete='KA-81', required)
-      
-    .form-group.row
-      label.col-md-3.col-form-label.font-weight-bold.text-right(for='password') Password
-      .col-md-7
-        input.form-control(type='password', name='password', id='password', placeholder='Password', autocomplete='new-password', required)
-    
-    .form-group.row
-      label.col-md-3.col-form-label.font-weight-bold.text-right(for='confirmPassword') Confirm Password
-      .col-md-7
-        input.form-control(type='password', name='confirmPassword', id='confirmPassword', placeholder='Confirm Password', autocomplete='new-password', required)
-    
-    .form-group.offset-sm-3.col-md-7.pl-2
-      button.btn.btn-success(type='submit')
-        i.fas.fa-user-plus.fa-sm
-        | Signup
+  .middle-box.text-center.loginscreen.animated.fadeInDown
+    div
+      div
+        h1.logo-name IT-h
+      h3 Register to IT-hindus
+      p Create account to see it in action.
+      form.m-t(role='form', action='/signup', method='POST')
+        input.form-control(type='hidden', name='_csrf', value=_csrf)
+        .form-group
+          input.form-control(type='email', name='email', placeholder='Email', required='')
+        .form-group
+          input.form-control(type='text', name='firstname', placeholder='First name', required='')
+        .form-group
+          input.form-control(type='text', name='lastname', placeholder='Last name', required='')
+        .form-group
+          input.form-control(type='text', name='group', placeholder='Group', required='')
+        .form-group
+          input.form-control(type='password', name='password', placeholder='Password', required='')
+        .form-group
+          input.form-control(type='password', name='password2', placeholder='Confirm password', required='')
+        .form-group
+          .checkbox.i-checks
+            label
+              input(type='checkbox', required='')
+              i
+              |  Agree the terms and policy
+        button.btn.btn-primary.block.full-width.m-b(type='submit') Register
+        p.text-muted.text-center
+          small Already have an account?
+        a.btn.btn-sm.btn-white.btn-block(href='/login') Login
+      p.m-t
+        small IT-hindus © 2019
