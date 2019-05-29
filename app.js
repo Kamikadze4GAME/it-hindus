@@ -3,7 +3,9 @@
  */
 require('dotenv').config();
 
+
 const express = require('express');
+const createError = require('http-errors');
 const compression = require('compression');
 const session = require('express-session');
 const bodyParser = require('body-parser');
@@ -81,6 +83,10 @@ app.use(sass({
   src: path.join(__dirname, 'public'),
   dest: path.join(__dirname, 'public')
 }));
+
+// Statics
+app.use(express.static(path.join(__dirname, 'public'), {dotfiles:'allow'}));
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -122,7 +128,7 @@ app.use(lusca({
 app.disable('x-powered-by');
 app.use((req, res, next) => {
   res.locals.user = req.user;
-  console.log(req.user, {depth:null})
+  console.log(req.user)
   next();
 });
 
@@ -131,7 +137,7 @@ app.use(function(req, res, next) {
   next();
 })
 
-app.use(express.static(path.join(__dirname, 'public')));
+
 
 
 
@@ -187,6 +193,12 @@ app.use('/', router);
 /**
  * Error Handler.
  */
+
+ // LAST LEVEL ----------
+ app.use(function(req, res, next) {
+   next(createError(404));
+ });
+
 if (process.env.NODE_ENV === 'development') {
   // only use in development
   app.use(errorHandler());
