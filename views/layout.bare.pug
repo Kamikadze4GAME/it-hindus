@@ -5,15 +5,16 @@ html
   head
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    title #{title} - [it-hindus]
-    link(href='css/bootstrap.min.css', rel='stylesheet')
-    link(href='font-awesome/css/font-awesome.css', rel='stylesheet')
-    link(href='css/plugins/iCheck/custom.css', rel='stylesheet')
-    link(href='css/plugins/toastr/toastr.min.css', rel='stylesheet')
-    link(href='css/animate.css', rel='stylesheet')
-    link(href='css/style.css', rel='stylesheet')
-    
     meta(name='csrf-token', content=_csrf)
+        
+    title #{title} - [it-hindus]
+    link(href='/css/bootstrap.min.css', rel='stylesheet')
+    link(href='/font-awesome/css/font-awesome.css', rel='stylesheet')
+    link(href='/css/plugins/iCheck/custom.css', rel='stylesheet')
+    link(href='/css/plugins/toastr/toastr.min.css', rel='stylesheet')
+    link(href='/css/animate.css', rel='stylesheet')
+    link(href='/css/style.css', rel='stylesheet')
+    
     
     block head
   
@@ -21,15 +22,15 @@ html
     block content
     
     // Mainly scripts
-    script(src='js/jquery-3.1.1.min.js')
-    script(src='js/popper.min.js')
-    script(src='js/bootstrap.js')
+    script(src='/js/jquery-3.1.1.min.js')
+    script(src='/js/popper.min.js')
+    script(src='/js/bootstrap.js')
       
     // iCheck
-    script(src='js/plugins/iCheck/icheck.min.js')
+    script(src='/js/plugins/iCheck/icheck.min.js')
     
     // Toastr
-    script(src='js/plugins/toastr/toastr.min.js')
+    script(src='/js/plugins/toastr/toastr.min.js')
     
     include partials/flash
     
