@@ -22,7 +22,12 @@ const passport = require('passport');
 const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
+
+
 // const multer = require('multer');
+const Minio = require("minio");
+
+
 
 // const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
@@ -111,30 +116,37 @@ app.use(flash());
 //     lusca.csrf()(req, res, next);
 //   }
 // });
-app.use(lusca({
-  csrf: true,
-  // csp: { /* ... */},
-  xframe: 'SAMEORIGIN',
-  // p3p: 'ABCDEF',
-  // hsts: {maxAge: 31536000, includeSubDomains: true, preload: true},
-  // xssProtection: true,
-  // nosniff: true,
-  // referrerPolicy: 'same-origin'
-}));
+
+// app.use(lusca({
+//   csrf: true,
+//   // csp: { /* ... */},
+//   xframe: 'SAMEORIGIN',
+//   // p3p: 'ABCDEF',
+//   // hsts: {maxAge: 31536000, includeSubDomains: true, preload: true},
+//   // xssProtection: true,
+//   // nosniff: true,
+//   // referrerPolicy: 'same-origin'
+// }));
+
 // app.use(lusca.xframe('SAMEORIGIN'));
 // app.use(lusca.xssProtection(true));
 app.disable('x-powered-by');
 app.use((req, res, next) => {
   res.locals.user = req.user;
-  console.log(req.user)
+  // console.log(req.user)
   next();
 });
 
-app.use(function(req, res, next) {
-  console.log(req);
-  next();
-})
 
+const minioClient = new Minio.Client({
+    endPoint: 'it-hindus.site',
+    port: 9000,
+    useSSL: false,
+    accessKey: '51BAKNAZ8VKGUDDXLX2H',
+    secretKey: 'XSHPObaywhk0NfVCMhC03KHMyjhJDj4ydnNxFkuo'
+});
+
+app.locals.s3 = minioClient;
 
 // Statics
 app.use(express.static(path.join(__dirname, 'public'), {dotfiles:'allow'}));

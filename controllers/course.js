@@ -83,6 +83,8 @@ exports.postCreateCourse = (req, res, next) => {
 
   req.assert('title', 'Title is required').len(3);
 
+  console.log(req.body);
+
   const errors = req.validationErrors();
 
   if (errors) {
@@ -95,10 +97,135 @@ exports.postCreateCourse = (req, res, next) => {
     desc: req.body.desc,
     createdBy: req.user._id
   });
-
+  console.log('saving...');
   return course.save()
     .then(_ => {
-      console.log(_);
+      req.flash('success', { msg: 'Course created!' });
+      return res.redirect('/courses/'+_._id);
     })
     .catch(_ => next(_))
+};
+
+
+exports.deleteCourse = (req, res, next) => {
+  if (!req.user) {
+    return res.redirect('/');
+  }
+
+  return Course.deleteOne({_id: mongodb.ObjectID(req.params.course_id)})
+    // .populate('createdBy modules')
+    .then(course => {
+      if(!course) {
+        req.flash('errors', [{msg: `No such course with ID: ${req.params.course_id}`}]);
+      }
+      else {
+        req.flash('success', [{msg: `Course was deleted! ID: ${req.params.course_id}`}]);
+      }
+      return res.redirect('/courses');
+    })
+    .catch(_ => next(_))
+    ;
+};
+
+
+exports.getEditCourse = (req, res, next) => {
+  if (!req.user) {
+    return res.redirect('/');
+  }
+
+  return Course.findOne({_id: mongodb.ObjectID(req.params.course_id)})
+    // .populate('createdBy modules')
+    .then(course => {
+      if(!course) {
+        req.flash('errors', [{msg: `No such course with ID: ${req.params.course_id}`}]);
+        return res.redirect('/courses');
+      }
+
+      return res.render('course/edit', {
+        // title: 'Courses',
+        course: course
+      });
+    })
+    .catch(_ => next(_))
+    ;
+};
+
+exports.postEditCourse = (req, res, next) => {
+  if (!req.user) {
+    return res.redirect('/');
+  }
+
+  req.assert('title', 'Title is required').len(3);
+
+
+  const errors = req.validationErrors();
+
+  return Course.updateOne(
+    {_id: mongodb.ObjectID(req.params.course_id)},
+    {
+      title: req.body.title,
+      desc: req.body.desc,
+    }
+  )
+    // .populate('createdBy modules')
+    .then(course => {
+      if(!course) {
+        req.flash('errors', [{msg: `No such course with ID: ${req.params.course_id}`}]);
+        return res.redirect('/courses');
+      }
+
+      req.flash('success', [{msg: `Course was updated! ID: ${req.params.course_id}`}]);
+
+      return res.redirect('/courses/'+course._id);
+
+    })
+    .catch(_ => next(_))
+    ;
+};
+
+exports.postAddModule = (req, res, next) => {
+  if (!req.user) {
+    return res.redirect('/');
+  }
+
+  req.assert('title', 'Title is required').len(3);
+
+  const id = mongodb.ObjectID();
+  const name = 'courses/'+req.params.course_id+'/modules/'+id+'___'+encodeURI(req.file.originalname);
+  let errors;
+
+  return Promise.resolve()
+    .then(_ => {
+      return req.app.locals.s3.putObject("test", name, req.file.buffer);
+    })
+    .then(etag => {
+      errors = req.validationErrors();
+
+      return Course.findOneAndUpdate(
+        {_id: mongodb.ObjectID(req.params.course_id)},
+        {
+          $push: {
+            modules: {
+              _id: id,
+              title: req.body.title,
+              desc: req.body.desc,
+              video: name
+            }
+          }
+        }
+      )
+    })
+    .then(course => {
+      if(!course) {
+        req.flash('errors', [{msg: `No such course with ID: ${req.params.course_id}`}]);
+        return res.redirect('/courses');
+      }
+
+      req.flash('success', [{msg: `Course was updated! ID: ${req.params.course_id}`}]);
+
+      return res.redirect('/courses/'+course._id);
+
+    })
+    .catch(_ => next(_))
+    ;
 };

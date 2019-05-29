@@ -11,11 +11,11 @@ block content
     .ibox
       .ibox-title
         h5 All projects assigned to this account
-        .ibox-tools
-          a.btn.btn-primary.btn-xs(href='/courses/create') Create new project
+        if user.isAdmin
+          .ibox-tools
+            a.btn.btn-primary.btn-xs(href='/courses/create') Create new course
       .ibox-content
         .project-list
-          //- p !{JSON.stringify(courses)}
           table.table.table-hover
             tbody
               each course in courses
@@ -25,7 +25,7 @@ block content
                   td.project-title
                     a(href='/courses/'+course.id, role='button') #{course.title}
                     br
-                    small Created 14.08.2014
+                    small Created #{course.createdAt ? course.createdAt.toISOString().substring(0, 10) : 'unknown'}
                   //- td.project-completion
                     small Completion with: 48%
                     .progress.progress-mini

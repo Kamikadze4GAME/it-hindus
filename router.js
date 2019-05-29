@@ -3,8 +3,8 @@
 const express = require('express');
 
 const path = require('path');
-const multer = require('multer');
-const upload = multer({ dest: path.join(__dirname, 'uploads') });
+const Multer = require('multer');
+const upload = Multer({ dest: path.join(__dirname, 'uploads') });
 
 /**
  * Controllers (route handlers).
@@ -79,6 +79,26 @@ router.get('/courses', passportConfig.isAuthenticated, courseController.getCours
 router.get('/courses/create', passportConfig.isAuthenticated, courseController.getCreateCourse);
 router.post('/courses/create', passportConfig.isAuthenticated, courseController.postCreateCourse);
 router.get('/courses/:course_id([0-9a-fA-F]{24})', passportConfig.isAuthenticated, courseController.getCourse);
+router.post('/courses/:course_id([0-9a-fA-F]{24})/delete', passportConfig.isAuthenticated, courseController.deleteCourse);
+
+router.get('/courses/:course_id([0-9a-fA-F]{24})/edit', passportConfig.isAuthenticated, courseController.getEditCourse);
+router.post('/courses/:course_id([0-9a-fA-F]{24})/edit', passportConfig.isAuthenticated, courseController.postEditCourse);
+
+
+router.post('/courses/:course_id([0-9a-fA-F]{24})/modules',
+  passportConfig.isAuthenticated,
+  Multer({storage: Multer.memoryStorage()}).single('video'),
+  courseController.postAddModule
+);
+
+// app.post("/upload", , function(request, response) {
+//     minioClient.putObject("test", request.file.originalname, request.file.buffer, function(error, etag) {
+//         if(error) {
+//             return console.log(error);
+//         }
+//         response.send(request.file);
+//     });
+// });
 
 // router.get('/api/upload', apiController.getFileUpload);
 // router.post('/api/upload', upload.single('myFile'), apiController.postFileUpload);

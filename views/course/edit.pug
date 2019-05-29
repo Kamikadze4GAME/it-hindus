@@ -1,0 +1,94 @@
+extends ../layout
+
+block variables
+  - var __title__ = 'Edit "'+course.title+'"'
+  - var __page__ = 'courses:edit'
+  - var __pages__ = __page__.split(':')
+  - var __breadcrumb__ = [{title:'Home', link:'/'}, {title:'Course list', link:'/courses'}, {title:course.title, link:'/courses/'+course._id}]
+  //- - var course = course || {}
+
+block content
+  .wrapper.wrapper-content.animated.fadeInRight
+    .row
+      .col-lg-6
+        .ibox
+          .ibox-title
+            h5 Basic information
+          .ibox-content
+            form(method='POST', action='/courses/edit')
+              input.form-control(type='hidden', name='_csrf', value=_csrf)
+              .form-group.row
+                label.col-sm-2.col-form-label Course title
+                .col-sm-10
+                  input.form-control(type='text', name='title', placeholder='Course title', value=course.title)
+              .form-group.row
+                label.col-sm-2.col-form-label Description
+                .col-sm-10
+                  input.form-control(type='text', name='desc', placeholder='Description', value=course.title)
+              .hr-line-dashed
+              .form-group.row
+                .col-sm-12
+                  a.btn.btn-white(onlick='window.history.back(); return false;') Cancel
+                  button.btn.btn-primary(type='submit') Update
+      .col-lg-6
+        .ibox
+          .ibox-title
+            h5 All lessons
+            if user.isAdmin || true
+              .ibox-tools
+                a.btn.btn-sm.btn-primary(data-toggle='modal', href='#modal-form') Add new lesson
+                #modal-form.modal.fade(aria-hidden='true', style='text-align:left')
+                  .modal-dialog
+                    .modal-content
+                      .modal-body
+                        .row
+                          .col-sm-12
+                            h3.m-t-none New lesson
+                            form(role='form', method='POST', enctype="multipart/form-data", action='/courses/'+course.id+'/modules')
+                              input(type='hidden', name='_csrf', value=_csrf)
+                              .form-group
+                                label Title
+                                input.form-control(type='text', name='title', placeholder='Title', required)
+                              .form-group
+                                label Description
+                                input.form-control(type='text', name='desc', placeholder='Description')
+                              
+                              .form-group
+                                label Video
+                                .custom-file
+                                  input#logo.custom-file-input(type='file', name='video', required)
+                                  label.custom-file-label(for='logo') Choose file...
+
+                              div
+                                button.btn.btn-sm.btn-primary.float-right.m-t-n-xs(type='submit')
+                                  strong Add lesson
+
+          .ibox-content
+            .project-list
+              table.table.table-hover
+                tbody
+                  each module in course.modules
+                    tr
+                      td.project-title
+                        a(href='/courses/'+course.id+'/modules/'+module._id, role='button') #{module.title}
+                        
+                        br
+                        small Created #{module.createdAt ? module.createdAt.toISOString().substring(0, 10) : 'unknown'}
+                      td.project-actions
+                        a.btn.btn-white.btn-sm(href='/courses/'+course.id+'/modules/'+module._id)
+                          i.fa.fa-folder
+                          |  View
+                        a.btn.btn-danger.btn-sm(href='/courses/'+course.id+'/modules/'+module._id+'/delete')
+                          | Delete
+                        if module.video
+                          a.btn.btn-primary.btn-sm(href='http://it-hindus.site:9000/test/'+module.video, target='_blank')
+                            | Video
+
+
+block scripts
+  script.
+    
+    $('.custom-file-input').on('change', function() {
+     let fileName = $(this).val().split('\\').pop();
+     $(this).next('.custom-file-label').addClass("selected").html(fileName);
+    }); 

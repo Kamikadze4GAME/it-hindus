@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 
 const LessonSchema = new mongoose.Schema({
   title: String,
-  description: String,
+  desc: String,
 
   active: Boolean,
   video: String,
@@ -15,9 +15,10 @@ const LessonSchema = new mongoose.Schema({
 
 const ModuleSchema = new mongoose.Schema({
   title: String,
-  description: String,
+  desc: String,
 
   active: Boolean,
+  video: String,
   lessons: [LessonSchema],
 
 }, { timestamps: true });
@@ -40,16 +41,22 @@ const CourseSchema = new mongoose.Schema({
 
 
 CourseSchema.pre('find', function() {
-  this.populate('modules').populate('createdBy');
+  this
+    // .populate('modules')
+    // .populate('modules.lessons')
+    .populate('createdBy')
+    ;
 });
 CourseSchema.pre('findOne', function() {
-  this.populate('modules').populate('createdBy');
+  this.populate('createdBy');
 });
 
 const Course = mongoose.model('Course', CourseSchema);
 
 module.exports = Course;
-//
+
+
+
 //
 // var a = new Course({
 //   title: 'Course title',

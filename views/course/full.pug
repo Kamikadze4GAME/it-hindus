@@ -1,7 +1,7 @@
 extends ../layout
 
 block variables
-  - var __title__ = 'Course ...'
+  - var __title__ = course.title
   - var __page__ = 'course:full'
   - var __pages__ = __page__.split(':')
   - var __breadcrumb__ = [{title:'Home', link:'/'}, {title:'Course list', link:'/courses'}]
@@ -16,7 +16,6 @@ block content
               .row
                 .col-lg-12
                   .m-b-md
-                    a.btn.btn-white.btn-xs.float-right(href='edit') Edit course
                     h2 #{course.title}
               .row
                 .col-lg-6
@@ -31,45 +30,18 @@ block content
                       dt Created by:
                     .col-sm-8.text-sm-left
                       dd.mb-1= (course.createdBy && course.createdBy.profile ? course.createdBy.profile.firstname + ' ' + course.createdBy.profile.lastname : '<empty>')
-                  dl.row.mb-0
-                    .col-sm-4.text-sm-right
-                      dt Messages:
-                    .col-sm-8.text-sm-left
-                      dd.mb-1  162
+                  //- dl.row.mb-0
+                  //-   .col-sm-4.text-sm-right
+                  //-     dt Messages:
+                  //-   .col-sm-8.text-sm-left
+                  //-     dd.mb-1  162
                 #cluster_info.col-lg-6
                   dl.row.mb-0
                     .col-sm-4.text-sm-right
                       dt Created:
                     .col-sm-8.text-sm-left
-                      dd.mb-1  10.07.2014 23:36:57
-                  //- dl.row.mb-0
-                    .col-sm-4.text-sm-right
-                      dt Participants:
-                    .col-sm-8.text-sm-left
-                      dd.project-people.mb-1
-                        a(href='')
-                          img.rounded-circle(alt='image', src='img/a3.jpg')
-                        a(href='')
-                          img.rounded-circle(alt='image', src='img/a1.jpg')
-                        a(href='')
-                          img.rounded-circle(alt='image', src='img/a2.jpg')
-                        a(href='')
-                          img.rounded-circle(alt='image', src='img/a4.jpg')
-                        a(href='')
-                          img.rounded-circle(alt='image', src='img/a5.jpg')
-              .row
-                .col-lg-12
-                  dl.row.mb-0
-                    .col-sm-2.text-sm-right
-                      dt Completed:
-                    .col-sm-10.text-sm-left
-                      dd
-                        .progress.m-b-1
-                          .progress-bar.progress-bar-striped.progress-bar-animated(style='width: 60%;')
-                        small
-                          | Project completed in 
-                          strong 60%
-                          | . Remaining close the project, sign a contract and invoice.
+                      dd.mb-1 #{course.createdAt ? course.createdAt.toISOString() : course.createdAt}
+                  
               .row.m-t-sm
                 .col-lg-12
                   .panel.blank-panel
@@ -77,7 +49,7 @@ block content
                       .panel-options
                         ul.nav.nav-tabs
                           li
-                            a.nav-link.active(href='#tab-1', data-toggle='tab') Modules
+                            a.nav-link.active(href='#tab-1', data-toggle='tab') Lessons
                           //- li
                             a.nav-link(href='#tab-2', data-toggle='tab') Modules
                     .panel-body
@@ -86,266 +58,32 @@ block content
                           table.table.table-striped
                             thead
                               tr
-                                th Status
+                                th ID
                                 th Title
-                                th Start Time
-                                th End Time
-                                th Comments
+                                th Description
+                                th File
                                 tbody
-                                  tr
-                                    td
-                                      span.label.label-primary
-                                        i.fa.fa-check
-                                          |  Completed
-                                          td
-                                            | Create project in webapp
-                                            td
-                                              | 12.07.2014 10:10:1
-                                              td
-                                                | 14.07.2014 10:16:36
-                                                td
-                                                  p.small
-                                                    | Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable.
-                                                    tr
-                                                      td
-                                                        span.label.label-primary
-                                                          i.fa.fa-check
-                                                            |  Accepted
-                                                            td
-                                                              | Various versions
-                                                              td
-                                                                | 12.07.2014 10:10:1
-                                                                td
-                                                                  | 14.07.2014 10:16:36
-                                                                  td
-                                                                    p.small
-                                                                      | Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-                                                                      tr
-                                                                        td
-                                                                          span.label.label-primary
-                                                                            i.fa.fa-check
-                                                                              |  Sent
-                                                                              td
-                                                                                | There are many variations
-                                                                                td
-                                                                                  | 12.07.2014 10:10:1
-                                                                                  td
-                                                                                    | 14.07.2014 10:16:36
-                                                                                    td
-                                                                                      p.small
-                                                                                        | There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which
-                                                                                        tr
-                                                                                          td
-                                                                                            span.label.label-primary
-                                                                                              i.fa.fa-check
-                                                                                                |  Reported
-                                                                                                td
-                                                                                                  | Latin words
-                                                                                                  td
-                                                                                                    | 12.07.2014 10:10:1
-                                                                                                    td
-                                                                                                      | 14.07.2014 10:16:36
-                                                                                                      td
-                                                                                                        p.small
-                                                                                                          | Latin words, combined with a handful of model sentence structures
-                                                                                                          tr
-                                                                                                            td
-                                                                                                              span.label.label-primary
-                                                                                                                i.fa.fa-check
-                                                                                                                  |  Accepted
-                                                                                                                  td
-                                                                                                                    | The generated Lorem
-                                                                                                                    td
-                                                                                                                      | 12.07.2014 10:10:1
-                                                                                                                      td
-                                                                                                                        | 14.07.2014 10:16:36
-                                                                                                                        td
-                                                                                                                          p.small
-                                                                                                                            | The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.
-                                                                                                                            tr
-                                                                                                                              td
-                                                                                                                                span.label.label-primary
-                                                                                                                                  i.fa.fa-check
-                                                                                                                                    |  Sent
-                                                                                                                                    td
-                                                                                                                                      | The first line
-                                                                                                                                      td
-                                                                                                                                        | 12.07.2014 10:10:1
-                                                                                                                                        td
-                                                                                                                                          | 14.07.2014 10:16:36
-                                                                                                                                          td
-                                                                                                                                            p.small
-                                                                                                                                              | The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
-                                                                                                                                              tr
-                                                                                                                                                td
-                                                                                                                                                  span.label.label-primary
-                                                                                                                                                    i.fa.fa-check
-                                                                                                                                                      |  Reported
-                                                                                                                                                      td
-                                                                                                                                                        | The standard chunk
-                                                                                                                                                        td
-                                                                                                                                                          | 12.07.2014 10:10:1
-                                                                                                                                                          td
-                                                                                                                                                            | 14.07.2014 10:16:36
-                                                                                                                                                            td
-                                                                                                                                                              p.small
-                                                                                                                                                                | The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.
-                                                                                                                                                                tr
-                                                                                                                                                                  td
-                                                                                                                                                                    span.label.label-primary
-                                                                                                                                                                      i.fa.fa-check
-                                                                                                                                                                        |  Completed
-                                                                                                                                                                        td
-                                                                                                                                                                          | Lorem Ipsum is that
-                                                                                                                                                                          td
-                                                                                                                                                                            | 12.07.2014 10:10:1
-                                                                                                                                                                            td
-                                                                                                                                                                              | 14.07.2014 10:16:36
-                                                                                                                                                                              td
-                                                                                                                                                                                p.small
-                                                                                                                                                                                  | Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable.
-                                                                                                                                                                                  tr
-                                                                                                                                                                                    td
-                                                                                                                                                                                      span.label.label-primary
-                                                                                                                                                                                        i.fa.fa-check
-                                                                                                                                                                                          |  Sent
-                                                                                                                                                                                          td
-                                                                                                                                                                                            | Contrary to popular
-                                                                                                                                                                                            td
-                                                                                                                                                                                              | 12.07.2014 10:10:1
-                                                                                                                                                                                              td
-                                                                                                                                                                                                | 14.07.2014 10:16:36
-                                                                                                                                                                                                td
-                                                                                                                                                                                                  p.small
-                                                                                                                                                                                                    | Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical
-                        //- #tab-2.tab-pane
-                          .feed-activity-list
-                            .feed-element
-                              a.float-left(href='#')
-                                img.rounded-circle(alt='image', src='img/a2.jpg')
-                              .media-body
-                                small.float-right 2h ago
-                                strong Mark Johnson
-                                |  posted message on 
-                                strong Monica Smith
-                                |  site. 
-                                br
-                                small.text-muted Today 2:10 pm - 12.06.2014
-                                .well
-                                  | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
-                                  | Over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-                            .feed-element
-                              a.float-left(href='#')
-                                img.rounded-circle(alt='image', src='img/a3.jpg')
-                              .media-body
-                                small.float-right 2h ago
-                                strong Janet Rosowski
-                                |  add 1 photo on 
-                                strong Monica Smith
-                                | . 
-                                br
-                                small.text-muted 2 days ago at 8:30am
-                            .feed-element
-                              a.float-left(href='#')
-                                img.rounded-circle(alt='image', src='img/a4.jpg')
-                              .media-body
-                                small.float-right.text-navy 5h ago
-                                strong Chris Johnatan Overtunk
-                                |  started following 
-                                strong Monica Smith
-                                | . 
-                                br
-                                small.text-muted Yesterday 1:21 pm - 11.06.2014
-                                .actions
-                                  a.btn.btn-xs.btn-white(href='')
-                                    i.fa.fa-thumbs-up
-                                    |  Like
-                                  a.btn.btn-xs.btn-white(href='')
-                                    i.fa.fa-heart
-                                    |  Love
-                            .feed-element
-                              a.float-left(href='#')
-                                img.rounded-circle(alt='image', src='img/a5.jpg')
-                              .media-body
-                                small.float-right 2h ago
-                                strong Kim Smith
-                                |  posted message on 
-                                strong Monica Smith
-                                |  site. 
-                                br
-                                small.text-muted Yesterday 5:20 pm - 12.06.2014
-                                .well
-                                  | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
-                                  | Over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-                            .feed-element
-                              a.float-left(href='#')
-                                img.rounded-circle(alt='image', src='img/profile.jpg')
-                              .media-body
-                                small.float-right 23h ago
-                                strong Monica Smith
-                                |  love 
-                                strong Kim Smith
-                                | . 
-                                br
-                                small.text-muted 2 days ago at 2:30 am - 11.06.2014
-                            .feed-element
-                              a.float-left(href='#')
-                                img.rounded-circle(alt='image', src='img/a7.jpg')
-                              .media-body
-                                small.float-right 46h ago
-                                strong Mike Loreipsum
-                                |  started following 
-                                strong Monica Smith
-                                | . 
-                                br
-                                small.text-muted 3 days ago at 7:58 pm - 10.06.2014
+                                  each module, ind in course.modules
+                                    tr
+                                      td #{ind+1}
+                                      td #{module.title}
+                                      td #{module.desc}
+                                      td
+                                        if module.video
+                                          a.btn.btn-sm.btn-primary.btn-sm(href='http://it-hindus.site:9000/test/'+module.video, target='_blank')
+                                            | File
+                                  
       .col-lg-3
         .wrapper.wrapper-content.project-manager
           h4 Course description
           //- img.img-fluid(src='img/zender_logo.png')
           p.small #{course.desc}
-          h5 :DEBUG:
-          p.small !{JSON.stringify(course)}
-          //- p.small.font-bold
-          //-   span
-          //-     i.fa.fa-circle.text-warning
-          //-     |  High priority
-          //- h5 Project tag
-          //- ul.tag-list(style='padding: 0')
-          //-   li
-          //-     a(href='')
-          //-       i.fa.fa-tag
-          //-       |  Zender
-          //-   li
-          //-     a(href='')
-          //-       i.fa.fa-tag
-          //-       |  Lorem ipsum
-          //-   li
-          //-     a(href='')
-          //-       i.fa.fa-tag
-          //-       |  Passages
-          //-   li
-          //-     a(href='')
-          //-       i.fa.fa-tag
-          //-       |  Variations
-          //- h5 Project files
-          //- ul.list-unstyled.project-files
-          //-   li
-          //-     a(href='')
-          //-       i.fa.fa-file
-          //-       |  Project_document.docx
-          //-   li
-          //-     a(href='')
-          //-       i.fa.fa-file-picture-o
-          //-       |  Logo_zender_company.jpg
-          //-   li
-          //-     a(href='')
-          //-       i.fa.fa-stack-exchange
-          //-       |  Email_from_Alex.mln
-          //-   li
-          //-     a(href='')
-          //-       i.fa.fa-file
-          //-       |  Contract_20_11_2014.docx
-          .text-center.m-t-md
-            a.btn.btn-xs.btn-primary(href='#') Add files
-            a.btn.btn-xs.btn-primary(href='#') Report contact
+          if user.isAdmin
+            h5 :DEBUG:
+            p.small !{JSON.stringify(course)}
+            
+            .text-center.m-t-md
+              form(method='POST', action='/courses/'+course._id+'/delete')
+                input(type='hidden', name='_csrf', value=_csrf)
+                button.btn.btn-danger.btn-xs(type='submit', onclick='return confirm("are you sure?");') Delete course
+                a.btn.btn-white.btn-xs(href='/courses/'+course._id+'/edit') Edit course

@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
+  isAdmin: { type: Boolean, deafult: false },
   email: { type: String, unique: true },
   password: String,
   passwordResetToken: String,

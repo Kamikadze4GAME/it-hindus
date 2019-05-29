@@ -7,7 +7,10 @@ nav.navbar-default.navbar-static-side(role='navigation')
           a(href='#')
             span.block.m-t-xs.font-bold #{user.profile.firstname} #{user.profile.lastname}
             span.text-muted.text-xs.block
-              | #{user.profile.group || 'group?'}
+              if user.isAdmin
+                | !ADMIN!
+              else
+                | #{user.profile.group || 'group?'}
           //- a.dropdown-toggle(data-toggle='dropdown', href='#')
           //-   span.block.m-t-xs.font-bold #{user.profile.firstname} #{user.profile.lastname}
           //-   span.text-muted.text-xs.block
@@ -44,10 +47,10 @@ nav.navbar-default.navbar-static-side(role='navigation')
         ul.nav.nav-second-level.collapse
           li(class= __page__ === 'courses:list' ? 'active' : '')
             a(href='/courses') Full list
-          li(class= __page__ === 'courses:create' ? 'active' : '')
-            a(href='/courses/create') Create new
-          li
-            a(href='#') Second Level Item
+            
+          if user.isAdmin
+            li(class= __page__ === 'courses:create' ? 'active' : '')
+              a(href='/courses/create') Create new
 
     //- ul.nav.metismenu
       li
