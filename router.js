@@ -26,17 +26,17 @@ const router = express.Router();
 
 
 
-router.use((req, res, next) => {
-  // After successful login, redirect back to the intended page
-  if (!req.user
-    && req.path !== '/signin'
-    && req.path !== '/signup'
-  ) {
-    req.flash('errors', { msg: 'Not authorized' });
-    return res.redirect('/signin');
-  }
-  next();
-});
+// router.use((req, res, next) => {
+//   // After successful login, redirect back to the intended page
+//   if (!req.user
+//     && req.path !== '/signin'
+//     && req.path !== '/signup'
+//   ) {
+//     req.flash('errors', { msg: 'Not authorized' });
+//     return res.redirect('/signin');
+//   }
+//   next();
+// });
 
 
 /**
@@ -45,7 +45,7 @@ router.use((req, res, next) => {
 
 
 
-router.get('/', homeController.index);
+router.get('/', passportConfig.isAuthenticated, homeController.index);
 
 router.get('/signin', userController.getSignin);
 router.post('/signin', userController.postSignin);
