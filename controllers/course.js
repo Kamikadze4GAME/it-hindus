@@ -127,6 +127,33 @@ exports.deleteCourse = (req, res, next) => {
     ;
 };
 
+exports.deleteModule = (req, res, next) => {
+  if (!req.user) {
+    return res.redirect('/');
+  }
+
+  return Course.findOneAndUpdate(
+    {_id: mongodb.ObjectID(req.params.course_id)},
+    {
+      $pull: {
+        modules: mongodb.ObjectID(req.params.module_id)
+      }
+    }
+  )
+    // .populate('createdBy modules')
+    .then(course => {
+      if(!course) {
+        req.flash('errors', [{msg: `No such course with ID: ${req.params.course_id}`}]);
+      }
+      else {
+        req.flash('success', [{msg: `Module was deleted! ID: ${req.params.module_id}`}]);
+      }
+      return res.redirect('/courses/'+req.params.course_id));
+    })
+    .catch(_ => next(_))
+    ;
+};
+
 
 exports.getEditCourse = (req, res, next) => {
   if (!req.user) {
