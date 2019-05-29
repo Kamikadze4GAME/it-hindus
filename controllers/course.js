@@ -1,8 +1,6 @@
 const { promisify } = require('util');
 const _ = require('lodash');
 const Course = require('../models/Course');
-const Module = require('../models/Module');
-const Lesson = require('../models/Lesson');
 const mongodb = require('mongodb');
 /**
  * GET /courses

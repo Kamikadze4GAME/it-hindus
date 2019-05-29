@@ -49,44 +49,44 @@ CourseSchema.pre('findOne', function() {
 const Course = mongoose.model('Course', CourseSchema);
 
 module.exports = Course;
-
-
-var a = new Course({
-  title: 'Course title',
-  desc: 'desc',
-  createdBy: mongodb.ObjectID(),
-  modules: [
-    {
-      title: 'First module',
-      lessons: [
-        {
-          title: 'First lesson'
-        }
-      ]
-    }
-  ]
-});
-
+//
+//
+// var a = new Course({
+//   title: 'Course title',
+//   desc: 'desc',
+//   createdBy: mongodb.ObjectID(),
+//   modules: [
+//     {
+//       title: 'First module',
+//       lessons: [
+//         {
+//           title: 'First lesson'
+//         }
+//       ]
+//     }
+//   ]
+// });
+//
+// // console.log(JSON.stringify(a, null, 2));
+//
+// a.modules[1] = {
+//   title: 'Second module',
+//   lessons: [
+//     {
+//       title: 'First lesson'
+//     }
+//   ]
+// };
+//
+//
 // console.log(JSON.stringify(a, null, 2));
-
-a.modules[1] = {
-  title: 'Second module',
-  lessons: [
-    {
-      title: 'First lesson'
-    }
-  ]
-};
-
-
-console.log(JSON.stringify(a, null, 2));
-
-[a.modules[0], a.modules[1]] = [a.modules[1], a.modules[0]]
-
-console.log(JSON.stringify(a, null, 2));
-
-
-a.save().then(_ => {
-    console.log(_);
-  })
-  .catch(err => console.log(err))
+//
+// [a.modules[0], a.modules[1]] = [a.modules[1], a.modules[0]]
+//
+// console.log(JSON.stringify(a, null, 2));
+//
+//
+// a.save().then(_ => {
+//     console.log(_);
+//   })
+//   .catch(err => console.log(err))
