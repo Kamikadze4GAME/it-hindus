@@ -90,7 +90,7 @@ router.post('/courses/:course_id([0-9a-fA-F]{24})/modules',
   Multer({storage: Multer.memoryStorage()}).single('video'),
   courseController.postAddModule
 );
-router.post('/courses/:course_id([0-9a-fA-F]{24})/modules/:module_id([0-9a-fA-F]{24})/delete',
+router.get('/courses/:course_id([0-9a-fA-F]{24})/modules/:module_id([0-9a-fA-F]{24})/delete',
   passportConfig.isAuthenticated,
   courseController.deleteModule
 );
