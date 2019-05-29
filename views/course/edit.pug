@@ -75,9 +75,9 @@ block content
                         br
                         small Created #{module.createdAt ? module.createdAt.toISOString().substring(0, 10) : 'unknown'}
                       td.project-actions
-                        a.btn.btn-white.btn-sm(href='/courses/'+course.id+'/modules/'+module._id)
-                          i.fa.fa-folder
-                          |  View
+                        //- a.btn.btn-white.btn-sm(href='/courses/'+course.id+'/modules/'+module._id)
+                        //-   i.fa.fa-folder
+                        //-   |  View
                         a.btn.btn-danger.btn-sm(href='/courses/'+course.id+'/modules/'+module._id+'/delete')
                           | Delete
                         if module.video
