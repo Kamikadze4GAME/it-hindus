@@ -70,6 +70,7 @@ mongoose.connection.on('error', (err) => {
 /**
  * Express configuration.
  */
+console.log(__dirname);
 app.set('host', process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0');
 app.set('port', process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080);
 app.set('views', path.join(__dirname, 'views'));
@@ -110,9 +111,9 @@ app.use(lusca({
   csrf: true,
   // csp: { /* ... */},
   xframe: 'SAMEORIGIN',
-  p3p: 'ABCDEF',
+  // p3p: 'ABCDEF',
   // hsts: {maxAge: 31536000, includeSubDomains: true, preload: true},
-  xssProtection: true,
+  // xssProtection: true,
   // nosniff: true,
   // referrerPolicy: 'same-origin'
 }));
@@ -125,7 +126,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/chart.js/dist'), { maxAge: 31557600000 }));
 // app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/popper.js/dist/umd'), { maxAge: 31557600000 }));
