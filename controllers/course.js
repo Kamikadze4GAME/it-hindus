@@ -132,22 +132,23 @@ exports.deleteModule = (req, res, next) => {
     return res.redirect('/');
   }
 
-  return Course.findOneAndUpdate(
-    {_id: mongodb.ObjectID(req.params.course_id)},
-    {
-      $pull: {
-        modules: mongodb.ObjectID(req.params.module_id)
-      }
-    }
+  return Course.findOne(
+    {_id: mongodb.ObjectID(req.params.course_id)}
   )
     // .populate('createdBy modules')
     .then(course => {
       if(!course) {
         req.flash('errors', [{msg: `No such course with ID: ${req.params.course_id}`}]);
+        return res.redirect('/courses/'+req.params.course_id);
       }
-      else {
-        req.flash('success', [{msg: `Module was deleted! ID: ${req.params.module_id}`}]);
-      }
+
+      course.modules.remove(mongodb.ObjectID(req.params.module_id));
+
+      return course.save();
+    })
+    .then(_ => {
+      req.flash('success', [{msg: `Module was deleted! ID: ${req.params.module_id}`}]);
+
       return res.redirect('/courses/'+req.params.course_id);
     })
     .catch(_ => next(_))
