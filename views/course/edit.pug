@@ -78,8 +78,9 @@ block content
                         //- a.btn.btn-white.btn-sm(href='/courses/'+course.id+'/modules/'+module._id)
                         //-   i.fa.fa-folder
                         //-   |  View
-                        a.btn.btn-danger.btn-sm(href='/courses/'+course.id+'/modules/'+module._id+'/delete')
-                          | Delete
+                        form(method='POST', action='/courses/'+course.id+'/modules/'+module._id+'/delete')
+                          input(type='hidden', name='_csrf', value=_csrf)
+                          button.btn.btn-danger.btn-xs(type='submit', onclick='return confirm("Are you sure?");') Delete
                         if module.video
                           a.btn.btn-primary.btn-sm(href='http://it-hindus.site:9000/test/'+module.video, target='_blank')
                             | Video
