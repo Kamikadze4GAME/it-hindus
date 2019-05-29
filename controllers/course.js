@@ -148,7 +148,7 @@ exports.deleteModule = (req, res, next) => {
       else {
         req.flash('success', [{msg: `Module was deleted! ID: ${req.params.module_id}`}]);
       }
-      return res.redirect('/courses/'+req.params.course_id));
+      return res.redirect('/courses/'+req.params.course_id);
     })
     .catch(_ => next(_))
     ;
