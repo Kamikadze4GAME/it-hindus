@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 userSchema.pre('find', function() {
+  // this.favorites = this.likedCourses();
   this
     // .populate('modules')
     // .populate('modules.lessons')
@@ -30,6 +31,7 @@ userSchema.pre('find', function() {
     ;
 });
 userSchema.pre('findOne', function() {
+  // this.favorites = this.likedCourses();
   this.populate('favorites');
 });
 
@@ -59,7 +61,7 @@ userSchema.methods.comparePassword = function comparePassword(candidatePassword,
 };
 
 userSchema.methods.likedCourses = function likedCourses() {
-  return Course.find({liked:this._id}).exec();
+  return Course.find({liked: this._id}).populate('liked').exec();
 };
 
 // userSchema.methods.favoriteCourse = function favoriteCourse(courseID) {
