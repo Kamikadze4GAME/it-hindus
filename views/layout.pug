@@ -105,8 +105,8 @@ html
               p.vjs-no-js
                 | To view this video please enable JavaScript, and consider upgrading to a web browser that 
                 a(href='http://videojs.com/html5-video-support/', target='_blank') supports HTML5 video
-          
           .modal-footer
+            p#video-log(style='float:left;')
             button.btn.btn-secondary(type='button', data-dismiss='modal') Close
             //- button.btn.btn-primary(type='button') Save changes
           
@@ -114,6 +114,20 @@ html
       $(document).ready(function() {
         var videoModal = $('#video-modal');
         videoModal.player = videojs($('#vid1')[0])
+        
+        function tt() {
+          var ar = [];
+          var time = videoModal.player.played();
+          
+          for(var i = 0; i < time.length; i++) {
+            ar.push([time.start(i), time.end(i)]);
+            $('#video-log').html( ((time.end(i)-time.start(i))/videoModal.player.duration() * 100).toFixed(2) + '%' );
+          }
+        }
+        
+        setInterval(function() {
+          tt();
+        }, 1000)
         
         $('.btn-video-modal').click(function(e) {
           e.preventDefault();
