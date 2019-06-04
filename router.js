@@ -78,9 +78,13 @@ router.post('/profile/delete', passportConfig.isAuthenticated, userController.po
 router.get('/courses', passportConfig.isAuthenticated, courseController.getCourseList);
 router.get('/courses/create', passportConfig.isAuthenticated, courseController.getCreateCourse);
 router.post('/courses/create', passportConfig.isAuthenticated, courseController.postCreateCourse);
+
+
 router.get('/courses/:course_id([0-9a-fA-F]{24})', passportConfig.isAuthenticated, courseController.getCourse);
 router.post('/courses/:course_id([0-9a-fA-F]{24})/delete', passportConfig.isAuthenticated, courseController.deleteCourse);
 
+router.get('/courses/:course_id([0-9a-fA-F]{24})/like', passportConfig.isAuthenticated, courseController.favoriteCourse);
+router.get('/courses/:course_id([0-9a-fA-F]{24})/unlike', passportConfig.isAuthenticated, courseController.unfavoriteCourse);
 router.get('/courses/:course_id([0-9a-fA-F]{24})/edit', passportConfig.isAuthenticated, courseController.getEditCourse);
 router.post('/courses/:course_id([0-9a-fA-F]{24})/edit', passportConfig.isAuthenticated, courseController.postEditCourse);
 

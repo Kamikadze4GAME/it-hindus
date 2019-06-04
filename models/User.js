@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const Course = require('./Course');
 
 const userSchema = new mongoose.Schema({
   isAdmin: { type: Boolean, deafult: false },
@@ -8,6 +10,8 @@ const userSchema = new mongoose.Schema({
   password: String,
   passwordResetToken: String,
   passwordResetExpires: Date,
+
+  favorites: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
 
   profile: {
     firstname: String,
@@ -17,6 +21,17 @@ const userSchema = new mongoose.Schema({
     picture: String
   }
 }, { timestamps: true });
+
+userSchema.pre('find', function() {
+  this
+    // .populate('modules')
+    // .populate('modules.lessons')
+    .populate('favorites')
+    ;
+});
+userSchema.pre('findOne', function() {
+  this.populate('favorites');
+});
 
 /**
  * Password hash middleware.
@@ -42,6 +57,19 @@ userSchema.methods.comparePassword = function comparePassword(candidatePassword,
     cb(err, isMatch);
   });
 };
+
+userSchema.methods.likedCourses = function likedCourses() {
+  return Course.find({liked:this._id}).exec();
+};
+
+// userSchema.methods.favoriteCourse = function favoriteCourse(courseID) {
+//   this.favorites.push(courseID);
+//   return this.save();
+// };
+// userSchema.methods.unfavoriteCourse = function unfavoriteCourse(courseID) {
+//   this.favorites.remove(courseID);
+//   return this.save();
+// };
 
 /**
  * Helper method for getting user's gravatar.

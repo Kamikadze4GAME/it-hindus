@@ -17,6 +17,10 @@ block content
                 .col-lg-12
                   .m-b-md
                     h2 #{course.title}
+                      if !liked
+                        a.btn.btn-white.btn-xs(href='/courses/'+course._id+'/like') like
+                      else
+                        a.btn.btn-white.btn-xs(href='/courses/'+course._id+'/unlike') unlike
               .row
                 .col-lg-6
                   dl.row.mb-0
@@ -40,7 +44,8 @@ block content
                     .col-sm-4.text-sm-right
                       dt Created:
                     .col-sm-8.text-sm-left
-                      dd.mb-1 #{course.createdAt ? course.createdAt.toISOString() : course.createdAt}
+                      //- dd.mb-1 #{course.createdAt ? course.createdAt.toISOString() : course.createdAt}
+                      dd.mb-1 #{moment(course.createdAt).format('DD.MM.YYYY')}
                   
               .row.m-t-sm
                 .col-lg-12
@@ -70,8 +75,8 @@ block content
                                       td #{module.desc}
                                       td
                                         if module.video
-                                          a.btn.btn-sm.btn-primary.btn-sm(href='http://it-hindus.site:9000/test/'+module.video, target='_blank')
-                                            | File
+                                          a.btn.btn-sm.btn-primary.btn-sm.btn-video-modal(href='http://it-hindus.site:9000/test/'+module.video, title=module.title)
+                                            | Video
                                   
       .col-lg-3
         .wrapper.wrapper-content.project-manager
@@ -79,6 +84,8 @@ block content
           //- img.img-fluid(src='img/zender_logo.png')
           p.small #{course.desc}
           if user.isAdmin
+            h5 :DEBUG:
+            p.small !{JSON.stringify(user)}
             h5 :DEBUG:
             p.small !{JSON.stringify(course)}
             

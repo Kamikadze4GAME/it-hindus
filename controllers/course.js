@@ -1,7 +1,11 @@
 const { promisify } = require('util');
 const _ = require('lodash');
 const Course = require('../models/Course');
+const User = require('../models/User');
 const mongodb = require('mongodb');
+const mime = require('mime');
+
+const ALLOWED_VIDEO_TYPES = ['AVI', 'FLV', 'WMV', 'MP4', 'MOV', 'ARF'];
 /**
  * GET /courses
  */
@@ -37,10 +41,10 @@ exports.getCourse = (req, res, next) => {
         return res.redirect('/courses');
       }
 
-
       return res.render('course/full', {
         // title: 'Courses',
-        course: course
+        course: course,
+        liked: course.liked.includes(req.user._id)
       });
     })
     .catch(_ => next(_))
@@ -178,6 +182,54 @@ exports.getEditCourse = (req, res, next) => {
     ;
 };
 
+exports.favoriteCourse = (req, res, next) => {
+  if (!req.user) {
+    return res.redirect('/');
+  }
+
+  const errors = req.validationErrors();
+
+  return Course.findOne({_id: mongodb.ObjectID(req.params.course_id)})
+    .then(course => {
+      if(course) {
+        return course.like(req.user);
+      }
+    })
+    .then(course => {
+
+      req.flash('success', [{msg: `Course was favorited! ID: ${req.params.course_id}`}]);
+
+      return res.redirect('/courses/'+req.params.course_id);
+
+    })
+    .catch(_ => next(_))
+    ;
+};
+exports.unfavoriteCourse = (req, res, next) => {
+  if (!req.user) {
+    return res.redirect('/');
+  }
+
+  const errors = req.validationErrors();
+
+  return Course.findOne({_id: mongodb.ObjectID(req.params.course_id)})
+    .then(course => {
+      if(course) {
+        return course.unlike(req.user);
+      }
+    })
+    .then(course => {
+
+      req.flash('success', [{msg: `Course was favorited! ID: ${req.params.course_id}`}]);
+
+      return res.redirect('/courses/'+req.params.course_id);
+
+    })
+    .catch(_ => next(_))
+    ;
+};
+
+
 exports.postEditCourse = (req, res, next) => {
   if (!req.user) {
     return res.redirect('/');
@@ -219,7 +271,20 @@ exports.postAddModule = (req, res, next) => {
   req.assert('title', 'Title is required').len(3);
 
   const id = mongodb.ObjectID();
-  const name = 'courses/'+req.params.course_id+'/modules/'+id+'___'+encodeURI(req.file.originalname);
+
+  // const extension = mime.getExtension(req.file.mimetype);
+  let originalname = req.file.originalname.split('.');
+  let extension = originalname.slice();
+  extension = (extension[extension.length - 1] || 'bin').toLowerCase();
+
+  console.log('extension', req.file.mimetype, extension);
+
+  if(ALLOWED_VIDEO_TYPES.indexOf(extension.toUpperCase()) === -1) {
+    req.flash('errors', [{msg: `Wrong video format. Allowed: ${ALLOWED_VIDEO_TYPES.join(', ')}`}]);
+    return res.redirect('/courses/'+req.params.course_id+'/edit');
+  }
+
+  const name = 'courses/'+req.params.course_id+'/modules/'+id+'___'+encodeURI(originalname.slice(0, originalname.length-1).join('.')) + '.' + extension;
   let errors;
 
   return Promise.resolve()

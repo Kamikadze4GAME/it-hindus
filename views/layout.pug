@@ -12,19 +12,21 @@ html
     
     link(href='/css/bootstrap.css', rel='stylesheet',type='text/css')
     link(href='/font-awesome/css/font-awesome.css', rel='stylesheet', type='text/css')
+    link(href='//vjs.zencdn.net/7.3.0/video-js.min.css', rel='stylesheet', type='text/css')
     // Toastr style
     link(href='/css/plugins/toastr/toastr.min.css', rel='stylesheet', type='text/css')
     // Steps
     link(href='/css/plugins/steps/jquery.steps.css', rel='stylesheet', type='text/css')
     // Gritter
     link(href='/js/plugins/gritter/jquery.gritter.css', rel='stylesheet', type='text/css')
+    
     link(href='/css/animate.css', rel='stylesheet', type='text/css')
     link(href='/css/style.css', rel='stylesheet', type='text/css')
       
     block head
 
   body
-
+    
     #wrapper
       // Sidebar
       include partials/sidebar
@@ -86,10 +88,41 @@ html
     script(src='/js/plugins/chartJs/Chart.min.js')
     // Toastr
     script(src='/js/plugins/toastr/toastr.min.js')
+    // VideoJS
+    script(src='//vjs.zencdn.net/7.3.0/video.min.js')
     
-    
-    
-    
+    .modal.fade#video-modal(tabindex='-1', role='dialog', aria-labelledby='myExtraLargeModalLabel', aria-hidden='true')
+      .modal-dialog.modal-lg
+        .modal-content
+          .modal-header
+            h5.modal-title 
+            button.close(type='button', data-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') ×
+          
+          .modal-body
+            video-js#vid1(controls, preload='auto', style='width:100%')
+              source(src='http://it-hindus.site:9000/test/courses/5ceebb29e073d05aee26930d/modules/5cf680964ef8b331181b719d___Untitled.mov.mov')
+              p.vjs-no-js
+                | To view this video please enable JavaScript, and consider upgrading to a web browser that 
+                a(href='http://videojs.com/html5-video-support/', target='_blank') supports HTML5 video
+          
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+            //- button.btn.btn-primary(type='button') Save changes
+          
+    script.
+      $(document).ready(function() {
+        var videoModal = $('#video-modal');
+        videoModal.player = videojs($('#vid1')[0])
+        
+        $('.btn-video-modal').click(function(e) {
+          e.preventDefault();
+          videoModal.player.src($(this).attr('href'));
+          videoModal.find('h5').text($(this).attr('title'));
+          videoModal.modal('show');
+        });
+      });
+      
     
     block scripts
 

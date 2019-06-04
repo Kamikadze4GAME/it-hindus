@@ -31,6 +31,8 @@ const CourseSchema = new mongoose.Schema({
   active: Boolean,
   modules: [ModuleSchema],
 
+  liked: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+
   createdBy: { type: Schema.Types.ObjectId, ref: 'User' },
 
 }, { timestamps: true });
@@ -38,9 +40,30 @@ const CourseSchema = new mongoose.Schema({
 
 
 
+CourseSchema.methods.isFavorite = function isFavorite(user) {
+  if(user && Array.isArray(user.favorites)) {
+    for(let i = 0; i < user.favorites; i++) {
+      if(String(user.favorites[i]._id) === String(this._id)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+CourseSchema.methods.like = function like(user) {
+  this.liked.push(user._id);
+  return this.save();
+}
+CourseSchema.methods.unlike = function unlike(user) {
+  this.liked.remove(user._id);
+  return this.save();
+}
+
 
 
 CourseSchema.pre('find', function() {
+
   this
     // .populate('modules')
     // .populate('modules.lessons')

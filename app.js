@@ -22,6 +22,7 @@ const passport = require('passport');
 const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
+const moment = require('moment');
 
 
 // const multer = require('multer');
@@ -89,6 +90,7 @@ app.use(compression());
 //   dest: path.join(__dirname, 'public')
 // }));
 
+app.locals.moment = moment;
 
 app.use(logger('dev'));
 app.use(bodyParser.json());

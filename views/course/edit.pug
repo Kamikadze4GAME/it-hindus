@@ -56,7 +56,7 @@ block content
                               .form-group
                                 label Video
                                 .custom-file
-                                  input#logo.custom-file-input(type='file', name='video', required)
+                                  input#logo.custom-file-input(type='file', name='video', required, accept="video/*")
                                   label.custom-file-label(for='logo') Choose file...
 
                               div
@@ -73,7 +73,8 @@ block content
                         a(href='/courses/'+course.id+'/modules/'+module._id, role='button') #{module.title}
                         
                         br
-                        small Created #{module.createdAt ? module.createdAt.toISOString().substring(0, 10) : 'unknown'}
+                        small Created #{moment(module.createdAt).format('DD.MM.YYYY')}
+                        //- small Created #{module.createdAt ? module.createdAt.toISOString().substring(0, 10) : 'unknown'}
                       td.project-actions
                         //- a.btn.btn-white.btn-sm(href='/courses/'+course.id+'/modules/'+module._id)
                         //-   i.fa.fa-folder
@@ -82,7 +83,7 @@ block content
                           input(type='hidden', name='_csrf', value=_csrf)
                           button.btn.btn-danger.btn-xs(type='submit', onclick='return confirm("Are you sure?");') Delete
                         if module.video
-                          a.btn.btn-primary.btn-sm(href='http://it-hindus.site:9000/test/'+module.video, target='_blank')
+                          a.btn.btn-primary.btn-xs.btn-video-modal(href='http://it-hindus.site:9000/test/'+module.video, title=module.title)
                             | Video
 
 

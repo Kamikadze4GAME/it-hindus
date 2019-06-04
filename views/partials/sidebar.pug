@@ -7,6 +7,7 @@ nav.navbar-default.navbar-static-side(role='navigation')
           a(href='#')
             span.block.m-t-xs.font-bold #{user.profile.firstname} #{user.profile.lastname}
             span.text-muted.text-xs.block
+              //- pre #{user.likedCourses()}
               if user.isAdmin
                 | !ADMIN!
               else
@@ -45,6 +46,7 @@ nav.navbar-default.navbar-static-side(role='navigation')
           span.nav-label Courses
           span.fa.arrow
         ul.nav.nav-second-level.collapse
+          
           li(class= __page__ === 'courses:list' ? 'active' : '')
             a(href='/courses') Full list
             

@@ -25,7 +25,7 @@ block content
                   td.project-title
                     a(href='/courses/'+course.id, role='button') #{course.title}
                     br
-                    small Created #{course.createdAt ? course.createdAt.toISOString().substring(0, 10) : 'unknown'}
+                    small Created #{moment(course.createdAt).format('DD.MM.YYYY')}
                   //- td.project-completion
                     small Completion with: 48%
                     .progress.progress-mini
