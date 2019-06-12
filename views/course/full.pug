@@ -130,7 +130,7 @@ block content
                                     td #{member.user.profile.name}
                                     td.center #{member.user.profile.group}
                                     td.center #{moment(member.date).format('DD.MM.YYYY')}
-                                    td.center 0 %
+                                    td.center #{(Object.values(user_proges).reduce((acc, cur) => {return acc+cur;}, 0) || 0)/course.modules.length} %
                                 
                               tfoot
                                 tr
