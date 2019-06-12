@@ -83,10 +83,14 @@ router.post('/courses/create', passportConfig.isAuthenticated, courseController.
 router.get('/courses/:course_id([0-9a-fA-F]{24})', passportConfig.isAuthenticated, courseController.getCourse);
 router.post('/courses/:course_id([0-9a-fA-F]{24})/delete', passportConfig.isAuthenticated, courseController.deleteCourse);
 
+router.get('/courses/:course_id([0-9a-fA-F]{24})/accept', passportConfig.isAuthenticated, courseController.acceptCourse);
+router.get('/courses/:course_id([0-9a-fA-F]{24})/unaccept', passportConfig.isAuthenticated, courseController.unacceptCourse);
+
 router.get('/courses/:course_id([0-9a-fA-F]{24})/like', passportConfig.isAuthenticated, courseController.favoriteCourse);
 router.get('/courses/:course_id([0-9a-fA-F]{24})/unlike', passportConfig.isAuthenticated, courseController.unfavoriteCourse);
 router.get('/courses/:course_id([0-9a-fA-F]{24})/edit', passportConfig.isAuthenticated, courseController.getEditCourse);
 router.post('/courses/:course_id([0-9a-fA-F]{24})/edit', passportConfig.isAuthenticated, courseController.postEditCourse);
+
 
 
 router.post('/courses/:course_id([0-9a-fA-F]{24})/modules',
@@ -97,6 +101,10 @@ router.post('/courses/:course_id([0-9a-fA-F]{24})/modules',
 router.post('/courses/:course_id([0-9a-fA-F]{24})/modules/:module_id([0-9a-fA-F]{24})/delete',
   passportConfig.isAuthenticated,
   courseController.deleteModule
+);
+router.get('/courses/:course_id([0-9a-fA-F]{24})/modules/:module_id([0-9a-fA-F]{24})/progress/:progress',
+  passportConfig.isAuthenticated,
+  courseController.setProgress
 );
 
 // app.post("/upload", , function(request, response) {

@@ -20,6 +20,8 @@ html
     // Gritter
     link(href='/js/plugins/gritter/jquery.gritter.css', rel='stylesheet', type='text/css')
     
+    link(href='/css/plugins/dataTables/datatables.min.css', rel='stylesheet', type='text/css')
+      
     link(href='/css/animate.css', rel='stylesheet', type='text/css')
     link(href='/css/style.css', rel='stylesheet', type='text/css')
       
@@ -91,6 +93,10 @@ html
     // VideoJS
     script(src='//vjs.zencdn.net/7.3.0/video.min.js')
     
+    
+    script(src='/js/plugins/dataTables/datatables.min.js')
+    script(src='/js/plugins/dataTables/dataTables.bootstrap4.min.js')
+    
     .modal.fade#video-modal(tabindex='-1', role='dialog', aria-labelledby='myExtraLargeModalLabel', aria-hidden='true')
       .modal-dialog.modal-lg
         .modal-content
@@ -119,21 +125,30 @@ html
           var ar = [];
           var time = videoModal.player.played();
           
+          var total_time = 0;
           for(var i = 0; i < time.length; i++) {
-            ar.push([time.start(i), time.end(i)]);
-            $('#video-log').html( ((time.end(i)-time.start(i))/videoModal.player.duration() * 100).toFixed(2) + '%' );
+            total_time += (time.end(i)-time.start(i));
           }
+          var percent = total_time/videoModal.player.duration() * 100;
+          
+          $('#video-log').html( (total_time/videoModal.player.duration() * 100).toFixed(2) + '%' );
+          $.ajax('/courses/' + videoModal.course + '/modules/' + videoModal.module + '/progress/' + (percent/100));
+          
+          setTimeout(function() {
+            tt();
+          }, 500);
         }
         
-        setInterval(function() {
-          tt();
-        }, 1000)
+        
         
         $('.btn-video-modal').click(function(e) {
           e.preventDefault();
           videoModal.player.src($(this).attr('href'));
           videoModal.find('h5').text($(this).attr('title'));
+          videoModal.course = $(this).attr('data-course-id');
+          videoModal.module = $(this).attr('data-id');
           videoModal.modal('show');
+          tt();
         });
       });
       

@@ -6,7 +6,20 @@ block variables
   - var __pages__ = __page__.split(':')
   - var __breadcrumb__ = [{title:'Home', link:'/'}, {title:'Course list', link:'/courses'}]
 
+  - console.log(course);
+
 block content
+  -
+    var user_proges = {};
+    (course.members || []).forEach(member => {
+      if(String(member.user._id) === String(user._id)) {
+        (member.progress || []).forEach(prog => {
+          user_proges[prog.moduleID] = prog.progress * 100;
+        })
+      }
+    });
+    // console.log(user_proges);
+  
   .wrapper.wrapper-content.animated.fadeInUp
     .row
       .col-lg-9
@@ -18,9 +31,14 @@ block content
                   .m-b-md
                     h2 #{course.title}
                       if !liked
-                        a.btn.btn-white.btn-xs(href='/courses/'+course._id+'/like') like
+                        a.btn.btn-white.btn-xs(href='/courses/'+course._id+'/like',style='margin-left:10px;') like
                       else
-                        a.btn.btn-white.btn-xs(href='/courses/'+course._id+'/unlike') unlike
+                        a.btn.btn-white.btn-xs(href='/courses/'+course._id+'/unlike',style='margin-left:10px;') unlike
+                      
+                      if !course.isMember(user)
+                        a.btn.btn-primary.btn-xs(href='/courses/'+course._id+'/accept',style='margin-left:10px;') Participate
+                      else
+                        a.btn.btn-warning.btn-xs(href='/courses/'+course._id+'/unaccept',style='margin-left:10px;') Unparticipate
               .row
                 .col-lg-6
                   dl.row.mb-0
@@ -29,11 +47,18 @@ block content
                     .col-sm-8.text-sm-left
                       dd.mb-1
                         span.label.label-primary Active
+                  
                   dl.row.mb-0
                     .col-sm-4.text-sm-right
                       dt Created by:
                     .col-sm-8.text-sm-left
-                      dd.mb-1= (course.createdBy && course.createdBy.profile ? course.createdBy.profile.firstname + ' ' + course.createdBy.profile.lastname : '<empty>')
+                      dd.mb-1= (course.createdBy && course.createdBy.profile ? course.createdBy.profile.firstname + ' ' + course.createdBy.profile.lastname : '<hidden>')
+                  
+                  dl.row.mb-0
+                    .col-sm-4.text-sm-right
+                      dt Created:
+                    .col-sm-8.text-sm-left
+                      dd.mb-1 #{moment(course.createdAt).format('DD.MM.YYYY')}
                   //- dl.row.mb-0
                   //-   .col-sm-4.text-sm-right
                   //-     dt Messages:
@@ -42,10 +67,14 @@ block content
                 #cluster_info.col-lg-6
                   dl.row.mb-0
                     .col-sm-4.text-sm-right
-                      dt Created:
+                      dt Members:
                     .col-sm-8.text-sm-left
-                      //- dd.mb-1 #{course.createdAt ? course.createdAt.toISOString() : course.createdAt}
-                      dd.mb-1 #{moment(course.createdAt).format('DD.MM.YYYY')}
+                      dd.mb-1 #{(course.members || []).length}
+                  dl.row.mb-0
+                    .col-sm-4.text-sm-right
+                      dt R u member:
+                    .col-sm-8.text-sm-left
+                      dd.mb-1 #{course.isMember(user)}
                   
               .row.m-t-sm
                 .col-lg-12
@@ -55,28 +84,62 @@ block content
                         ul.nav.nav-tabs
                           li
                             a.nav-link.active(href='#tab-1', data-toggle='tab') Lessons
-                          //- li
-                            a.nav-link(href='#tab-2', data-toggle='tab') Modules
+                          li
+                            a.nav-link(href='#tab-2', data-toggle='tab') Members
                     .panel-body
                       .tab-content
                         #tab-1.tab-pane.active
                           table.table.table-striped
                             thead
                               tr
-                                th ID
+                                th #
                                 th Title
                                 th Description
-                                th File
+                                if course.isMember(user)
+                                  th Video
+                                  th Progress
                                 tbody
                                   each module, ind in course.modules
                                     tr
                                       td #{ind+1}
                                       td #{module.title}
                                       td #{module.desc}
-                                      td
-                                        if module.video
-                                          a.btn.btn-sm.btn-primary.btn-sm.btn-video-modal(href='http://it-hindus.site:9000/test/'+module.video, title=module.title)
-                                            | Video
+                                      if course.isMember(user)
+                                        td
+                                          if module.video
+                                            a.btn.btn-sm.btn-primary.btn-sm.btn-video-modal(href='http://it-hindus.site:9000/test/'+module.video, title=module.title, data-id=module._id, data-course-id=course._id)
+                                              | Watch
+                                          else
+                                            -
+                                        td #{user_proges[module._id] || 0} %
+                                            
+                        #tab-2.tab-pane
+                          .table-responsive
+                            table.table.table-striped.table-bordered.table-hover.dataTables-example
+                              thead
+                                tr
+                                  th #
+                                  th Name
+                                  th Group
+                                  th Started
+                                  th Progress
+                              tbody
+                                each member, ind in course.members
+                                  tr
+                                    td #{ind+1}
+                                    td #{member.user.profile.name}
+                                    td.center #{member.user.profile.group}
+                                    td.center #{moment(member.date).format('DD.MM.YYYY')}
+                                    td.center 0 %
+                                
+                              tfoot
+                                tr
+                                  th #
+                                  th Name
+                                  th Group
+                                  th Started
+                                  th Progress
+
                                   
       .col-lg-3
         .wrapper.wrapper-content.project-manager
@@ -94,3 +157,38 @@ block content
                 input(type='hidden', name='_csrf', value=_csrf)
                 button.btn.btn-danger.btn-xs(type='submit', onclick='return confirm("are you sure?");') Delete course
                 a.btn.btn-white.btn-xs(href='/courses/'+course._id+'/edit') Edit course
+
+block scripts
+  script.
+    $(document).ready(function() {
+      $('.dataTables-example').DataTable({
+        pageLength: 10,
+        responsive: true,
+        dom: '<"html5buttons"B>lTfgitp',
+        buttons: [{
+            extend: 'copy'
+          },
+          {
+            extend: 'csv'
+          },
+          {
+            extend: 'excel',
+            title: 'ExampleFile'
+          },
+
+          {
+            extend: 'print',
+            customize: function(win) {
+              $(win.document.body).addClass('white-bg');
+              $(win.document.body).css('font-size', '10px');
+
+              $(win.document.body).find('table')
+                .addClass('compact')
+                .css('font-size', 'inherit');
+            }
+          }
+        ]
+
+      });
+
+    });

@@ -16,7 +16,7 @@ passport.deserializeUser((id, done) => {
   User.findById(id, (err, user) => {
     user.likedCourses()
       .then(_ => {
-        console.log('fuck', _);
+        // console.log('fuck', _);
         user.favorites = _;
         done(err, user);
       })

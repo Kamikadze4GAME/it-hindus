@@ -6,34 +6,40 @@ const Course = require('./Course');
 
 const userSchema = new mongoose.Schema({
   isAdmin: { type: Boolean, deafult: false },
-  email: { type: String, unique: true },
-  password: String,
+  email: { type: String, unique: true, required: true },
+  password: { type: String, required: true },
   passwordResetToken: String,
   passwordResetExpires: Date,
 
   favorites: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
 
   profile: {
-    firstname: String,
-    lastname: String,
-    group: String,
+    firstname: { type: String, required: true },
+    lastname: { type:  String, required: true },
+    group: { type: String, required: true },
 
-    picture: String
+    picture: { type: String, required: true },
   }
 }, { timestamps: true });
+
+
+
+userSchema.virtual('profile.name').get(function () {
+  return this.profile.firstname + ' ' + this.profile.lastname;
+});
 
 userSchema.pre('find', function() {
   // this.favorites = this.likedCourses();
   this
     // .populate('modules')
     // .populate('modules.lessons')
-    .populate('favorites')
+      .populate('favorites')
     ;
 });
-userSchema.pre('findOne', function() {
-  // this.favorites = this.likedCourses();
-  this.populate('favorites');
-});
+// userSchema.pre('findOne', function() {
+//   // this.favorites = this.likedCourses();
+//   this.populate('favorites');
+// });
 
 /**
  * Password hash middleware.

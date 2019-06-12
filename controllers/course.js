@@ -182,6 +182,54 @@ exports.getEditCourse = (req, res, next) => {
     ;
 };
 
+exports.acceptCourse = (req, res, next) => {
+  if (!req.user) {
+    return res.redirect('/');
+  }
+
+  const errors = req.validationErrors();
+
+  return Course.findOne({_id: mongodb.ObjectID(req.params.course_id)})
+    .then(course => {
+      if(course) {
+        return course.accept(req.user);
+      }
+    })
+    .then(course => {
+
+      req.flash('success', [{msg: `Now you participate this course! ID: ${req.params.course_id}`}]);
+
+      return res.redirect('/courses/'+req.params.course_id);
+
+    })
+    .catch(_ => next(_))
+    ;
+};
+
+exports.unacceptCourse = (req, res, next) => {
+  if (!req.user) {
+    return res.redirect('/');
+  }
+
+  const errors = req.validationErrors();
+
+  return Course.findOne({_id: mongodb.ObjectID(req.params.course_id)})
+    .then(course => {
+      if(course) {
+        return course.unaccept(req.user);
+      }
+    })
+    .then(course => {
+
+      req.flash('success', [{msg: `Now you are unparticipated from this course! ID: ${req.params.course_id}`}]);
+
+      return res.redirect('/courses/'+req.params.course_id);
+
+    })
+    .catch(_ => next(_))
+    ;
+};
+
 exports.favoriteCourse = (req, res, next) => {
   if (!req.user) {
     return res.redirect('/');
@@ -205,6 +253,8 @@ exports.favoriteCourse = (req, res, next) => {
     .catch(_ => next(_))
     ;
 };
+
+
 exports.unfavoriteCourse = (req, res, next) => {
   if (!req.user) {
     return res.redirect('/');
@@ -318,6 +368,29 @@ exports.postAddModule = (req, res, next) => {
 
       return res.redirect('/courses/'+course._id);
 
+    })
+    .catch(_ => next(_))
+    ;
+};
+
+
+exports.setProgress = (req, res, next) => {
+  if (!req.user) {
+    return res.redirect('/');
+  }
+
+  return Course.findOne({_id: mongodb.ObjectID(req.params.course_id)})
+    .then(course => {
+      if(!course) {
+        req.flash('errors', [{msg: `No such course with ID: ${req.params.course_id}`}]);
+        return res.redirect('/courses/'+req.params.course_id);
+      }
+
+      return course.setProgress(mongodb.ObjectID(req.params.module_id), req.user, req.params.progress);
+
+    })
+    .then(course => {
+      return res.json({status:true});
     })
     .catch(_ => next(_))
     ;
